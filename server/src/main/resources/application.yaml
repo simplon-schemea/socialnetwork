@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/socialnetwork
+    username: postgres
+    password: password
+  liquibase:
+    liquibase-schema: public
+    change-log: classpath:database/liquibase-changelog.xml
+    default-schema: socialnetwork
+  jpa:
+    hibernate:
+      ddl-auto: none

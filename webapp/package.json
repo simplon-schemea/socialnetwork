@@ -1,0 +1,27 @@
+{
+  "name": "scoialnetwork-app",
+  "version": "1.0.0",
+  "dependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "scripts": {
+    "dev-server": "webpack-dev-server --open"
+  },
+  "devDependencies": {
+    "@types/react-dom": "^16.9.8",
+    "awesome-typescript-loader": "latest",
+    "clean-webpack-plugin": "latest",
+    "copy-webpack-plugin": "latest",
+    "css-loader": "latest",
+    "html-webpack-plugin": "latest",
+    "sass": "latest",
+    "sass-loader": "latest",
+    "style-loader": "latest",
+    "ts-node": "latest",
+    "typescript": "latest",
+    "webpack": "latest",
+    "webpack-cli": "latest",
+    "webpack-dev-server": "latest"
+  }
+}
