@@ -3,9 +3,6 @@
     <words>
       <w>firstname</w>
       <w>lastname</w>
-      <w>ossp</w>
-      <w>postgresql</w>
-      <w>socialnetwork</w>
     </words>
   </dictionary>
 </component>

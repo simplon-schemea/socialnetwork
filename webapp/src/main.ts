@@ -1,7 +1,8 @@
+import "./styles.scss";
 import ReactDOM from "react-dom";
 import React from "react";
-import { Home } from "./components/home";
+import { App } from "./components/app";
 
-const root = document.appendChild(document.createElement("div"));
+const root = document.body.appendChild(document.createElement("div"));
 
-ReactDOM.render(React.createElement(Home), root);
+ReactDOM.render(React.createElement(App), root);

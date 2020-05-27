@@ -8,6 +8,12 @@ import { CleanWebpackPlugin } from "clean-webpack-plugin";
 
 let mode: Configuration["mode"];
 
+declare module "webpack" {
+    interface Configuration {
+        devServer: any;
+    }
+}
+
 switch (process.env.NODE_ENV) {
     case "development":
     case "production":
@@ -57,6 +63,12 @@ const config: Configuration = {
             }],
         }),
     ],
+    devServer: {
+        proxy: {
+            '/api': 'http://localhost:8080/'
+        },
+        historyApiFallback: true
+    }
 };
 
 if (mode === "development") {

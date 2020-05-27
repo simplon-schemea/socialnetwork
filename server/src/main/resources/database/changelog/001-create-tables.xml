@@ -14,6 +14,13 @@
             <column name="password" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
+            <column name="birthday" type="date"/>
+            <column name="firstname" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lastname" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
         <createTable tableName="roles">
             <column name="id" type="uuid" defaultValueComputed="${uuid_gen}">
@@ -24,11 +31,13 @@
             </column>
         </createTable>
         <createTable tableName="user_role">
-            <column name="user_id" type="uuid" >
-                <constraints primaryKey="true" primaryKeyName="user_role_pkey" nullable="false" foreignKeyName="user_fkey" referencedTableName="users" referencedColumnNames="id"/>
+            <column name="user_id" type="uuid">
+                <constraints primaryKey="true" primaryKeyName="user_role_pkey" nullable="false"
+                             foreignKeyName="user_fkey" referencedTableName="users" referencedColumnNames="id"/>
             </column>
             <column name="role_id" type="uuid">
-                <constraints primaryKey="true" primaryKeyName="user_role_pkey" nullable="false" foreignKeyName="role_fkey" referencedTableName="roles" referencedColumnNames="id"/>
+                <constraints primaryKey="true" primaryKeyName="user_role_pkey" nullable="false"
+                             foreignKeyName="role_fkey" referencedTableName="roles" referencedColumnNames="id"/>
             </column>
         </createTable>
     </changeSet>

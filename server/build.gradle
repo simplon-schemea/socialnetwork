@@ -33,10 +33,10 @@ dependencies {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
 
-    runtime 'org.postgresql:postgresql:42.1.4'
+    runtimeOnly 'org.postgresql:postgresql:42.1.4'
 
     implementation 'org.liquibase:liquibase-core'
-    runtime 'com.h2database:h2'
+    runtimeOnly 'com.h2database:h2'
 
     implementation 'org.modelmapper:modelmapper:2.3.0'
 }

@@ -1,0 +1,16 @@
+.info-banner-container {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &.error {
+    color: red;
+    background-color: #fbbb;
+  }
+
+  &.success {
+    color: green;
+    background-color: #bfbb;
+  }
+}

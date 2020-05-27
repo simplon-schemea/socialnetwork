@@ -1,0 +1,27 @@
+.account-form {
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+
+  .grid {
+    display: grid;
+    grid-gap: 5px;
+    grid-template-columns: min-content 1fr;
+
+    label {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+  }
+
+  .footer {
+    display: flex;
+    align-self: flex-end;
+    margin: 15px 5px 0;
+
+    button{
+      margin: 0 5px;
+    }
+  }
+}

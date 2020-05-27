@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/socialnetwork
+    url: jdbc:postgresql://${DATABASE_HOST:localhost}:5432/socialnetwork
     username: postgres
     password: password
   liquibase:
