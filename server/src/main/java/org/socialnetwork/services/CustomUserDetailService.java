@@ -3,7 +3,7 @@ package org.socialnetwork.services;
 import lombok.RequiredArgsConstructor;
 import org.socialnetwork.entities.UserEntity;
 import org.socialnetwork.repositories.UserRepository;
-import org.socialnetwork.resources.CustomUserDetails;
+import org.socialnetwork.security.CustomUserPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,6 +24,6 @@ public class CustomUserDetailService implements UserDetailsService {
                         () -> new UsernameNotFoundException(MessageFormat.format("{0} does not exists", mail))
                 );
 
-        return new CustomUserDetails(entity);
+        return new CustomUserPrincipal(entity);
     }
 }

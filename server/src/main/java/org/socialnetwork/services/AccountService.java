@@ -8,8 +8,8 @@ import org.socialnetwork.repositories.RoleRepository;
 import org.socialnetwork.repositories.UserRepository;
 import org.socialnetwork.resources.AccountCreationResource;
 import org.socialnetwork.resources.AccountLoginResource;
-import org.socialnetwork.resources.CustomUserDetails;
 import org.socialnetwork.resources.ProfileResource;
+import org.socialnetwork.security.CustomUserPrincipal;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -43,18 +43,18 @@ public class AccountService {
         return attr.getRequest().getSession(true);
     }
 
-    Optional<CustomUserDetails> getUserDetails() {
-        final Object details = SecurityContextHolder.getContext().getAuthentication().getDetails();
+    Optional<CustomUserPrincipal> getUserPrincipal() {
+        final Object details = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (details instanceof CustomUserDetails) {
-            return Optional.of((CustomUserDetails) details);
+        if (details instanceof CustomUserPrincipal) {
+            return Optional.of((CustomUserPrincipal) details);
         } else {
             return Optional.empty();
         }
     }
 
     Optional<UserEntity> getUser() {
-        return getUserDetails().map(CustomUserDetails::getUser);
+        return getUserPrincipal().map(CustomUserPrincipal::getUser);
     }
 
     Optional<UUID> getUserID() {
@@ -74,7 +74,7 @@ public class AccountService {
 
     public ProfileResource login(AccountLoginResource input) {
         {
-            CustomUserDetails user = getUserDetails().orElse(null);
+            CustomUserPrincipal user = getUserPrincipal().orElse(null);
 
             if (user != null && user.isEnabled() && user.isCredentialsNonExpired()) {
                 throw new IllegalArgumentException("already logged in");

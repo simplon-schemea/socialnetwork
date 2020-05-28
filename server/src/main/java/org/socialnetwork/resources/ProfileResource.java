@@ -5,20 +5,16 @@ import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Getter
 @Setter
 public class ProfileResource {
-    @NotEmpty
-    @Email
+    private UUID id;
     private String mail;
-
-    @NotEmpty
     private String firstname;
-
-    @NotEmpty
     private String lastname;
-
     private LocalDate birthday;
 }

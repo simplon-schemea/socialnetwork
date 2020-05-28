@@ -6,4 +6,5 @@ public class Routes {
 
     public final static String ACCOUNT = BASE_URL + "/account";
     public final static String PROFILES = BASE_URL + "/profiles";
+    public final static String MESSAGES = BASE_URL + "/messages";
 }

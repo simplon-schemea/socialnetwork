@@ -21,11 +21,7 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Email
-    @NotEmpty
     private String mail;
-
-    @NotEmpty
     private String password;
 
     @ManyToMany
@@ -37,11 +33,7 @@ public class UserEntity {
     @Fetch(FetchMode.JOIN)
     private Set<RoleEntity> roles = new HashSet<>();
 
-    @NotEmpty
     private String firstname;
-
-    @NotEmpty
     private String lastname;
-
     private LocalDate birthday;
 }

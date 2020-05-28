@@ -31,13 +31,17 @@ export const ProfileComponent = withRouter(function ({ history, ...props }: Rout
         return null;
     }
 
-    const ageMS = Date.now() - Date.parse(profile.birthday);
+    let age: number | undefined;
 
-    const age = Math.floor(ageMS / (365 * 24 * 3600 * 1000));
+    if (profile.birthday) {
+        const ageMS = Date.now() - Date.parse(profile.birthday);
+        age = Math.floor(ageMS / (365 * 24 * 3600 * 1000));
+    }
+
 
     return (
         <div>
-            { profile.firstname } { profile.lastname } born in { profile.birthday }, is now { age } years old
+            { profile.firstname } { profile.lastname }{ age && ` born in { profile.birthday }, is now ${ age } years old`}
             <br/>
             <Button variant="outlined" onClick={ logout }>
                 logout

@@ -1,4 +1,4 @@
-package org.socialnetwork.resources;
+package org.socialnetwork.security;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @RequiredArgsConstructor
-public class CustomUserDetails implements UserDetails {
+public class CustomUserPrincipal implements UserDetails {
     private final UserEntity user;
 
     @Override

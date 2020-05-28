@@ -2,6 +2,7 @@ package org.socialnetwork.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.socialnetwork.config.Routes;
+import org.socialnetwork.resources.MessageResource;
 import org.socialnetwork.resources.ProfileResource;
 import org.socialnetwork.services.ProfileService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -25,5 +27,11 @@ public class ProfileController {
     @GetMapping(Routes.ID)
     public ProfileResource getByID(@PathVariable UUID id) {
         return service.findByUserID(id);
+    }
+
+
+    @GetMapping(Routes.ID + "/messages")
+    Set<MessageResource> getMessages(@PathVariable UUID id) {
+        return service.getProfileMessages(id);
     }
 }
