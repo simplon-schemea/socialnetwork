@@ -2,6 +2,7 @@ package org.socialnetwork.entities;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -11,7 +12,6 @@ import java.util.UUID;
 @Getter
 @Setter
 public class MessageEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
@@ -22,6 +22,4 @@ public class MessageEntity {
 
     private Timestamp timestamp;
     private String content;
-
-    private boolean isProfileMessage;
 }

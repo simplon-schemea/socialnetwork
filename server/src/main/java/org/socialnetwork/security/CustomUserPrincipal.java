@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Getter
@@ -21,7 +22,7 @@ public class CustomUserPrincipal implements UserDetails {
         return user.getRoles().stream()
                 .map(RoleEntity::getName)
                 .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -51,6 +52,6 @@ public class CustomUserPrincipal implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return user != null;
+        return Objects.nonNull(user);
     }
 }

@@ -2,6 +2,7 @@
   <dictionary name="steph">
     <words>
       <w>firstname</w>
+      <w>fkey</w>
       <w>lastname</w>
       <w>ossp</w>
       <w>postgresql</w>

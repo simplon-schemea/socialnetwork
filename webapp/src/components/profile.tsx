@@ -6,19 +6,39 @@ import { Profile } from "../models/profile";
 import { AccountService } from "../services/account.service";
 import { store } from "../store";
 import { actions } from "../store/actions";
+import { useSelector } from "react-redux";
+import { State } from "../store/reducer";
 
 interface Props {
-    id: string | "self";
+    id?: string;
+}
+
+function yearLess(date: Date) {
+    date.setFullYear(0);
+    return date.getTime();
+}
+
+function calculateAge(birthday: Date) {
+    const now = new Date();
+    const age = now.getFullYear() - birthday.getFullYear();
+
+    return age - (yearLess(now) < yearLess(birthday) ? 1 : 0);
 }
 
 export const ProfileComponent = withRouter(function ({ history, ...props }: RouteComponentProps<any> & Props) {
     const [ profile, setProfile ] = useState<Profile>();
 
+    const storeProfile = useSelector((state: State) => state.profile);
+
     useEffect(function () {
-        ProfileService.get(props.id).then(function (profile) {
-            setProfile(profile);
-        });
-    }, [ props.id ]);
+        if (props.id) {
+            ProfileService.get(props.id).then(function (profile) {
+                setProfile(profile);
+            });
+        } else {
+            setProfile(storeProfile);
+        }
+    }, [ props.id || storeProfile ]);
 
     const logout = useCallback(function () {
         AccountService.logout().then(function () {
@@ -31,17 +51,10 @@ export const ProfileComponent = withRouter(function ({ history, ...props }: Rout
         return null;
     }
 
-    let age: number | undefined;
-
-    if (profile.birthday) {
-        const ageMS = Date.now() - Date.parse(profile.birthday);
-        age = Math.floor(ageMS / (365 * 24 * 3600 * 1000));
-    }
-
-
     return (
         <div>
-            { profile.firstname } { profile.lastname }{ age && ` born in { profile.birthday }, is now ${ age } years old`}
+            { profile.firstname } { profile.lastname }
+            { profile.birthday && `born in ${ profile.birthday }, is now ${ calculateAge(new Date(profile.birthday)) } years old` }
             <br/>
             <Button variant="outlined" onClick={ logout }>
                 logout

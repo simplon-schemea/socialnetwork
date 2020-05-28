@@ -5,7 +5,7 @@
 
   .grid {
     display: grid;
-    grid-gap: 5px;
+    grid-gap: 5px 10px;
     grid-template-columns: min-content 1fr;
 
     label {
@@ -13,6 +13,10 @@
       justify-content: flex-end;
       align-items: center;
       white-space: nowrap;
+
+      &:not(.Mui-required) {
+        padding-right: 10px;
+      }
     }
   }
 

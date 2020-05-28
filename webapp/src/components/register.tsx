@@ -65,29 +65,29 @@ export const RegisterComponent = withRouter(function ({ history }) {
     return (
         <form className="account-form" onSubmit={ register }>
             <div className="grid">
-                <InputLabel variant="standard">Email:
+                <InputLabel required={ true } variant="standard">Email
                 </InputLabel>
                 <Input name="mail" placeholder="Email" required={ true } type="email" value={ user.mail }
                        autoComplete="email"
                        onChange={ setMail }/>
 
-                <InputLabel variant="standard">Password:</InputLabel>
+                <InputLabel required={ true } variant="standard">Password</InputLabel>
                 <Input name="password" placeholder="Password" required={ true } type="password"
                        value={ user.password } onChange={ setPassword }/>
 
-                <InputLabel variant="standard">Password Confirmation:</InputLabel>
+                <InputLabel required={ true } variant="standard">Password Confirmation</InputLabel>
                 <Input placeholder="Password Confirmation" required={ true } type="password" ref={ setPasswordBisInput }
                        value={ state.passwordBis } onChange={ setPasswordBis }/>
 
-                <InputLabel variant="standard">Firstname:</InputLabel>
+                <InputLabel required={ true } variant="standard">Firstname</InputLabel>
                 <Input name="firstname" placeholder="Firstname" required={ true }
                        value={ user.firstname } onChange={ setFirstname }/>
 
-                <InputLabel variant="standard">Lastname:</InputLabel>
+                <InputLabel required={ true } variant="standard">Lastname</InputLabel>
                 <Input name="lastname" placeholder="Lastname" required={ true }
                        value={ user.lastname } onChange={ setLastname }/>
 
-                <InputLabel variant="standard">Birthday:</InputLabel>
+                <InputLabel variant="standard">Birthday</InputLabel>
                 <Input name="birthday" placeholder="Birthday" required={ false }
                        value={ user.birthday } onChange={ setBirthday }/>
             </div>

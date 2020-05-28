@@ -10,7 +10,6 @@ export namespace AccountService {
     export function register(user: User) {
         return Http.request({
             url: endpoint + "/register",
-            method: "POST",
             body: user,
         });
     }
@@ -18,14 +17,13 @@ export namespace AccountService {
     export function login(user: UserCredentials) {
         return Http.request<Profile>({
             url: endpoint + "/login",
-            method: "POST",
             body: user,
+            responseType: "json",
+            followRedirect: true
         });
     }
 
     export function logout() {
-        return Http.request({
-            url: endpoint + "/logout",
-        });
+        return Http.request(endpoint + "/logout");
     }
 }

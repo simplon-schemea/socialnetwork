@@ -17,8 +17,25 @@
             <column name="content" type="text">
                 <constraints nullable="false"/>
             </column>
-            <column name="is_profile_message" type="boolean">
-                <constraints nullable="false"/>
+        </createTable>
+        <createTable tableName="profile_topic">
+            <column name="user_id" type="uuid">
+                <constraints primaryKey="true" primaryKeyName="user_message_pkey" nullable="false"
+                             foreignKeyName="user_fkey" referencedTableName="users" referencedColumnNames="id"/>
+            </column>
+            <column name="message_id" type="uuid">
+                <constraints unique="true" primaryKey="true" primaryKeyName="user_message_pkey" nullable="false"
+                             foreignKeyName="message_fkey" referencedTableName="messages" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+        <createTable tableName="replies">
+            <column name="parent_id" type="uuid">
+                <constraints unique="true" primaryKey="true" primaryKeyName="parent_reply_pkey" nullable="false"
+                             foreignKeyName="parent_fkey" referencedTableName="messages" referencedColumnNames="id"/>
+            </column>
+            <column name="reply_id" type="uuid">
+                <constraints primaryKey="true" primaryKeyName="message_reply_pkey" nullable="false"
+                             foreignKeyName="reply_fkey" referencedTableName="messages" referencedColumnNames="id"/>
             </column>
         </createTable>
     </changeSet>

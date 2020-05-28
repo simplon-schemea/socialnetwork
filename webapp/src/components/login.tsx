@@ -5,6 +5,8 @@ import { Button, Input, InputLabel } from "@material-ui/core";
 import { UserCredentials } from "../models/user";
 import { AccountService } from "../services/account.service";
 import { withRouter } from "react-router-dom";
+import { store } from "../store";
+import { actions } from "../store/actions";
 
 export const LoginComponent = withRouter(function ({ history }) {
     const [ user, setUser ] = useState<UserCredentials>({
@@ -25,7 +27,10 @@ export const LoginComponent = withRouter(function ({ history }) {
     const login = useCallback(function (event: FormEvent) {
         event.preventDefault();
 
-        AccountService.login(user).then(function () {
+        AccountService.login(user).then(function (profile) {
+            store.dispatch(actions.setInfoBannerMessage("success", "Successfully logged in"));
+            store.dispatch(actions.loadProfile(profile));
+
             history.push("/profile");
         });
     }, [ user ]);
@@ -37,12 +42,12 @@ export const LoginComponent = withRouter(function ({ history }) {
     return (
         <form className="account-form" onSubmit={ login }>
             <div className="grid">
-                <InputLabel variant="standard">Email:
+                <InputLabel variant="standard">Email
                 </InputLabel>
                 <Input name="mail" placeholder="Email" required={ true } type="email" value={ user.mail }
                        autoComplete="email"
                        onChange={ setMail }/>
-                <InputLabel variant="standard">Password:</InputLabel>
+                <InputLabel variant="standard">Password</InputLabel>
                 <Input name="password" placeholder="Password" required={ true } type="password"
                        value={ user.password } onChange={ setPassword }/>
             </div>

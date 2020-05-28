@@ -29,6 +29,7 @@ console.log(`MODE: ${ mode }`);
 
 const config: Configuration = {
     entry: path.join(__dirname, "src/main.ts"),
+    output: { publicPath: "/" },
     target: "web",
     mode,
     module: {

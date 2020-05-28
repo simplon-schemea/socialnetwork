@@ -15,6 +15,4 @@ public class MessageResource {
 
     private Timestamp timestamp;
     private String content;
-
-    private boolean isProfileMessage;
 }

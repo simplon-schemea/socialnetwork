@@ -8,7 +8,6 @@ import org.socialnetwork.repositories.RoleRepository;
 import org.socialnetwork.repositories.UserRepository;
 import org.socialnetwork.resources.AccountCreationResource;
 import org.socialnetwork.resources.AccountLoginResource;
-import org.socialnetwork.resources.ProfileResource;
 import org.socialnetwork.security.CustomUserPrincipal;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +21,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -62,21 +62,21 @@ public class AccountService {
     }
 
     @Transactional
-    public ProfileResource register(AccountCreationResource input) {
+    public UUID register(AccountCreationResource input) {
         final UserEntity entity = mapper.map(input, UserEntity.class);
         final RoleEntity defaultRole = roleRepository.findByName("ROLE_USER").orElseThrow();
 
         entity.setPassword(encoder.encode(input.getPassword()));
         entity.getRoles().add(defaultRole);
 
-        return mapper.map(repository.save(entity), ProfileResource.class);
+        return repository.save(entity).getId();
     }
 
-    public ProfileResource login(AccountLoginResource input) {
+    public UUID login(AccountLoginResource input) {
         {
             CustomUserPrincipal user = getUserPrincipal().orElse(null);
 
-            if (user != null && user.isEnabled() && user.isCredentialsNonExpired()) {
+            if (Objects.nonNull(user) && user.isEnabled() && user.isCredentialsNonExpired()) {
                 throw new IllegalArgumentException("already logged in");
             }
         }
@@ -90,7 +90,14 @@ public class AccountService {
 
         getSession().setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
 
-        return mapper.map(authentication.getPrincipal(), ProfileResource.class);
+        final Object principal = authentication.getPrincipal();
+
+        if (principal instanceof CustomUserPrincipal) {
+            return ((CustomUserPrincipal) principal).getUser().getId();
+        } else {
+            throw new RuntimeException();
+        }
+
     }
 
     public void logout() {
