@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
-import { Login } from "./login";
+import { LoginComponent } from "./login";
 import { BrowserRouter, Route, withRouter } from "react-router-dom";
-import { Register } from "./register";
+import { RegisterComponent } from "./register";
 import { Provider } from "react-redux";
 import { store } from "../store";
-import { InfoBanner } from "./info-banner";
+import { InfoBannerComponent } from "./info-banner";
 import { ProfileService } from "../services/profile.service";
 import { actions } from "../store/actions";
-import { Profile } from "./profile";
+import { ProfileComponent } from "./profile";
 
 const RootRedirect = withRouter(function ({ history }) {
     useEffect(function () {
@@ -22,23 +22,23 @@ const RootRedirect = withRouter(function ({ history }) {
     return <></>;
 });
 
-export function App() {
+export function AppComponent() {
     return (
         <Provider store={ store }>
-            <InfoBanner/>
+            <InfoBannerComponent/>
             <main>
                 <BrowserRouter>
                     <Route path="/" exact={ true }>
                         <RootRedirect/>
                     </Route>
                     <Route path="/login" exact={ true }>
-                        <Login/>
+                        <LoginComponent/>
                     </Route>
                     <Route path="/register" exact={ true }>
-                        <Register/>
+                        <RegisterComponent/>
                     </Route>
                     <Route path="/profile" exact={ true }>
-                        <Profile id="self"/>
+                        <ProfileComponent id="self"/>
                     </Route>
                 </BrowserRouter>
             </main>

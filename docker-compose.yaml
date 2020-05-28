@@ -17,7 +17,7 @@ services:
     container_name: "socialnetwork-api"
     environment:
       - DATABASE_HOST=socialnetwork-database
-      - PORT=8080
+      - PORT=9000
     links:
       - postgres:socialnetwork-database
   webapp:
@@ -26,7 +26,7 @@ services:
     container_name: "socialnetwork-app"
     environment:
       - API_HOST=socialnetwork-api
-      - API_PORT=8080
+      - API_PORT=9000
     links:
       - api:socialnetwork-api
     ports:

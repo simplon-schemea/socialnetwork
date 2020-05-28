@@ -13,4 +13,4 @@ spring:
       ddl-auto: none
 
 server:
-  port: ${PORT:8080}
+  port: ${PORT:9000}

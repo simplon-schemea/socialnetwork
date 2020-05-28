@@ -17,6 +17,7 @@ import java.util.UUID;
 public class ProfileService {
     private final UserRepository repository;
     private final ModelMapper mapper;
+    private final AccountService accountService;
 
     public ProfileResource getProfileFromSession() {
         final SecurityContext sc = SecurityContextHolder.getContext();

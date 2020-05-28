@@ -65,7 +65,7 @@ const config: Configuration = {
     ],
     devServer: {
         proxy: {
-            '/api': 'http://localhost:8080/'
+            '/api': 'http://localhost:9000/'
         },
         historyApiFallback: true
     }

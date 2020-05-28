@@ -2,12 +2,16 @@ FROM node:13-alpine as builder
 
 WORKDIR /app
 
-COPY package.json package.json
-COPY package-lock.json package-lock.json
+COPY package.json .
+COPY package-lock.json .
 
 RUN npm ci
 
-COPY . .
+COPY webpack.config.ts .
+COPY tsconfig.json .
+COPY assets assets
+COPY src src
+
 RUN npm run build
 
 FROM nginx:alpine

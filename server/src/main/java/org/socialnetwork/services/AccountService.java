@@ -22,6 +22,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
@@ -41,6 +43,24 @@ public class AccountService {
         return attr.getRequest().getSession(true);
     }
 
+    Optional<CustomUserDetails> getUserDetails() {
+        final Object details = SecurityContextHolder.getContext().getAuthentication().getDetails();
+
+        if (details instanceof CustomUserDetails) {
+            return Optional.of((CustomUserDetails) details);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    Optional<UserEntity> getUser() {
+        return getUserDetails().map(CustomUserDetails::getUser);
+    }
+
+    Optional<UUID> getUserID() {
+        return getUser().map(UserEntity::getId);
+    }
+
     @Transactional
     public ProfileResource register(AccountCreationResource input) {
         final UserEntity entity = mapper.map(input, UserEntity.class);
@@ -54,19 +74,10 @@ public class AccountService {
 
     public ProfileResource login(AccountLoginResource input) {
         {
-            final SecurityContext sc = SecurityContextHolder.getContext();
+            CustomUserDetails user = getUserDetails().orElse(null);
 
-            if (sc != null) {
-                final Object principal = sc.getAuthentication().getPrincipal();
-
-                if (principal instanceof CustomUserDetails) {
-
-                    CustomUserDetails user = (CustomUserDetails) principal;
-
-                    if (user.isEnabled() && user.isCredentialsNonExpired()) {
-                        throw new IllegalArgumentException("already logged in");
-                    }
-                }
+            if (user != null && user.isEnabled() && user.isCredentialsNonExpired()) {
+                throw new IllegalArgumentException("already logged in");
             }
         }
 
@@ -80,5 +91,9 @@ public class AccountService {
         getSession().setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
 
         return mapper.map(authentication.getPrincipal(), ProfileResource.class);
+    }
+
+    public void logout() {
+        SecurityContextHolder.getContext().setAuthentication(null);
     }
 }

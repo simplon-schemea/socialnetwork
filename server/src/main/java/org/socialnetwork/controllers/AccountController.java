@@ -25,4 +25,9 @@ public class AccountController {
     ProfileResource login(@RequestBody @Valid AccountLoginResource input) {
         return service.login(input);
     }
+
+    @GetMapping("/logout")
+    void logout() {
+        service.logout();
+    }
  }

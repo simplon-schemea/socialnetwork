@@ -8,7 +8,7 @@ import { actions } from "../store/actions";
 import { Transition } from "react-transition-group";
 
 
-export function InfoBanner() {
+export function InfoBannerComponent() {
     const errors = useSelector((state: State) => state.infoBanner);
 
     const timerID = useRef<number | null>(null);

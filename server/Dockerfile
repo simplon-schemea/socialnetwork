@@ -2,10 +2,11 @@ FROM openjdk:14-alpine as builder
 
 WORKDIR /tmp
 
-COPY gradlew gradlew
+COPY gradlew .
+COPY settings.gradle .
+COPY build.gradle .
 COPY gradle gradle
-COPY settings.gradle settings.gradle
-COPY build.gradle build.gradle
+
 RUN sh gradlew deps
 
 COPY src src

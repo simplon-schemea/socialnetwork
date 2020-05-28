@@ -6,7 +6,7 @@ import { UserCredentials } from "../models/user";
 import { AccountService } from "../services/account.service";
 import { withRouter } from "react-router-dom";
 
-export const Login = withRouter(function ({ history }) {
+export const LoginComponent = withRouter(function ({ history }) {
     const [ user, setUser ] = useState<UserCredentials>({
         mail: "",
         password: "",
@@ -22,7 +22,7 @@ export const Login = withRouter(function ({ history }) {
     const setMail     = setUserField("mail");
     const setPassword = setUserField("password");
 
-    const onLogin = useCallback(function (event: FormEvent) {
+    const login = useCallback(function (event: FormEvent) {
         event.preventDefault();
 
         AccountService.login(user).then(function () {
@@ -30,12 +30,12 @@ export const Login = withRouter(function ({ history }) {
         });
     }, [ user ]);
 
-    const onRegister = useCallback(function () {
+    const register = useCallback(function () {
         history.push("/register");
     }, [ history ]);
 
     return (
-        <form className="account-form" onSubmit={ onLogin }>
+        <form className="account-form" onSubmit={ login }>
             <div className="grid">
                 <InputLabel variant="standard">Email:
                 </InputLabel>
@@ -47,7 +47,7 @@ export const Login = withRouter(function ({ history }) {
                        value={ user.password } onChange={ setPassword }/>
             </div>
             <div className="footer">
-                <Button variant="outlined" onClick={ onRegister }>register</Button>
+                <Button variant="outlined" onClick={ register }>register</Button>
                 <Button variant="outlined" type="submit">login</Button>
             </div>
         </form>

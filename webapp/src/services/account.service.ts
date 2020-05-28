@@ -22,4 +22,10 @@ export namespace AccountService {
             body: user,
         });
     }
+
+    export function logout() {
+        return Http.request({
+            url: endpoint + "/logout",
+        });
+    }
 }

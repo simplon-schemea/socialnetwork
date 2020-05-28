@@ -4,14 +4,16 @@ import { store } from "../store";
 
 function onload(this: XMLHttpRequest, resolve: Function, reject: Function) {
     try {
-        const body = typeof this.response === "string" ? JSON.parse(this.responseText) : this.response;
+        const body = this.response;
 
         if (this.status >= 200 && this.status < 400) {
             resolve(this.response);
         } else {
-            if (isBackendError(body)) {
-                store.dispatch(actions.setInfoBannerMessage("error", `${ body.error }: ${ body.message }`));
-                reject(body);
+            const errors = typeof body === "string" ? JSON.parse(body) : body;
+
+            if (isBackendError(errors)) {
+                store.dispatch(actions.setInfoBannerMessage("error", `${ errors.error }: ${ errors.message }`));
+                reject(errors);
             } else {
                 reject(this);
             }

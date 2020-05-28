@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { Profile } from "../models/profile";
+import React, { useCallback, useEffect, useState } from "react";
 import { ProfileService } from "../services/profile.service";
+import { Button } from "@material-ui/core";
+import { RouteComponentProps, withRouter } from "react-router-dom";
+import { Profile } from "../models/profile";
+import { AccountService } from "../services/account.service";
+import { store } from "../store";
+import { actions } from "../store/actions";
 
 interface Props {
     id: string | "self";
 }
 
-export function Profile(props: Props) {
+export const ProfileComponent = withRouter(function ({ history, ...props }: RouteComponentProps<any> & Props) {
     const [ profile, setProfile ] = useState<Profile>();
 
     useEffect(function () {
@@ -14,6 +19,13 @@ export function Profile(props: Props) {
             setProfile(profile);
         });
     }, [ props.id ]);
+
+    const logout = useCallback(function () {
+        AccountService.logout().then(function () {
+            store.dispatch(actions.setInfoBannerMessage("success", "Successfully logout"));
+            history.push("/login");
+        });
+    }, []);
 
     if (!profile) {
         return null;
@@ -26,6 +38,10 @@ export function Profile(props: Props) {
     return (
         <div>
             { profile.firstname } { profile.lastname } born in { profile.birthday }, is now { age } years old
+            <br/>
+            <Button variant="outlined" onClick={ logout }>
+                logout
+            </Button>
         </div>
     );
-}
+});
