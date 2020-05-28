@@ -7,16 +7,17 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=socialnetwork
-    ports:
-      - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
   api:
     build:
       context: server
     container_name: "socialnetwork-api"
     environment:
       - DATABASE_HOST=socialnetwork-database
+      - PORT=8080
     links:
       - postgres:socialnetwork-database
   webapp:
@@ -25,9 +26,11 @@ services:
     container_name: "socialnetwork-app"
     environment:
       - API_HOST=socialnetwork-api
+      - API_PORT=8080
     links:
       - api:socialnetwork-api
     ports:
       - 80:80
+      - 443:443
 volumes:
   pgdata:

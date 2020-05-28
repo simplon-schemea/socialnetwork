@@ -4,5 +4,5 @@ import { devToolsEnhancer } from "redux-devtools-extension";
 import { actions } from "./actions";
 
 export const store = createStore(reducer, devToolsEnhancer({
-    actionCreators: actions
-}))
+    actionCreators: actions,
+}));

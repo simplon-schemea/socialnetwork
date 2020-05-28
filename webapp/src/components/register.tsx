@@ -6,8 +6,9 @@ import { User } from "../models/user";
 import { AccountService } from "../services/account.service";
 import { useStore } from "react-redux";
 import { actions } from "../store/actions";
+import { withRouter } from "react-router-dom";
 
-export function Register() {
+export const Register = withRouter(function ({ history }) {
     const [ user, setUser ] = useState<User>({
         mail: "",
         password: "",
@@ -34,8 +35,9 @@ export function Register() {
     const onRegister = useCallback(function (event: FormEvent) {
         event.preventDefault();
 
-        AccountService.register(user).then(function () {
+        AccountService.register(user).  then(function () {
             store.dispatch(actions.setInfoBannerMessage("success", `Account created successfully`));
+            history.push("/login");
         });
     }, [ user ]);
 
@@ -69,4 +71,4 @@ export function Register() {
             </div>
         </form>
     );
-}
+});

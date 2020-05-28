@@ -10,6 +10,7 @@
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
+    "react-transition-group": "^4.4.1",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8"
   },
@@ -21,6 +22,7 @@
     "@material-ui/icons": "^4.9.1",
     "@types/react-dom": "^16.9.8",
     "@types/react-redux": "^7.1.9",
+    "@types/react-transition-group": "^4.4.0",
     "awesome-typescript-loader": "latest",
     "clean-webpack-plugin": "latest",
     "copy-webpack-plugin": "latest",

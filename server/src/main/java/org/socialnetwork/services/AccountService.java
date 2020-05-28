@@ -81,22 +81,4 @@ public class AccountService {
 
         return mapper.map(authentication.getPrincipal(), ProfileResource.class);
     }
-
-    public ProfileResource getProfile() {
-        final SecurityContext sc = SecurityContextHolder.getContext();
-
-        final Object principal = sc.getAuthentication().getPrincipal();
-
-        if (principal instanceof CustomUserDetails) {
-            final UserEntity entity = ((CustomUserDetails) principal).getUser();
-
-            if (entity == null) {
-                throw new IllegalArgumentException("not logged in");
-            }
-
-            return mapper.map(entity, ProfileResource.class);
-        }
-
-        return null;
-    }
 }

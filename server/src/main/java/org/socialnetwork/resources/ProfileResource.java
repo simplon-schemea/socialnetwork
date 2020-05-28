@@ -12,7 +12,7 @@ import java.time.LocalDate;
 public class ProfileResource {
     @NotEmpty
     @Email
-    String mail;
+    private String mail;
 
     @NotEmpty
     private String firstname;

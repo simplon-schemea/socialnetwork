@@ -1,8 +1,15 @@
-FROM gradle:6.4.1-jdk14 as builder
+FROM openjdk:14-alpine as builder
 
 WORKDIR /tmp
-COPY . .
-RUN gradle bootJar
+
+COPY gradlew gradlew
+COPY gradle gradle
+COPY settings.gradle settings.gradle
+COPY build.gradle build.gradle
+RUN sh gradlew deps
+
+COPY src src
+RUN sh gradlew bootJar
 
 ENTRYPOINT gradle bootrun
 

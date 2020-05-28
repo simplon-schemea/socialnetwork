@@ -2,58 +2,66 @@ import { isBackendError } from "../models/backend-error";
 import { actions } from "../store/actions";
 import { store } from "../store";
 
+function onload(this: XMLHttpRequest, resolve: Function, reject: Function) {
+    try {
+        const body = typeof this.response === "string" ? JSON.parse(this.responseText) : this.response;
+
+        if (this.status >= 200 && this.status < 400) {
+            resolve(this.response);
+        } else {
+            if (isBackendError(body)) {
+                store.dispatch(actions.setInfoBannerMessage("error", `${ body.error }: ${ body.message }`));
+                reject(body);
+            } else {
+                reject(this);
+            }
+        }
+    } catch (e) {
+        console.error(e);
+        reject(this);
+    }
+}
+
 export namespace Http {
     export interface Request {
         method?: "GET" | "POST",
         url: string,
         body?: any,
-        headers?: { [k: string]: string }
+        headers?: { [k: string]: string },
+        responseType?: XMLHttpRequest["responseType"];
     }
 
-    export function request(req: Request) {
-        return new Promise(function (resolve, reject) {
-                const xhr = new XMLHttpRequest();
-                let body  = req.body;
+    export function request<T>(req: Request & { responseType: "json" }): Promise<T>;
+    export function request<T>(req: Request & { responseType: "text" | undefined | null }): Promise<string>;
+    export function request<T>(req: Request): Promise<unknown>;
+    export function request<T>(req: Request) {
+        return new Promise<T>(function (resolve, reject) {
+            const xhr    = new XMLHttpRequest();
+            let body     = req.body;
+            const method = req.method || (req.body ? "POST" : "GET");
 
-                xhr.open(req.method || "GET", req.url);
+            xhr.open(method, req.url);
 
-                xhr.onload = function () {
-                    try {
-                        const body = JSON.parse(xhr.responseText);
+            xhr.onload          = onload.bind(xhr, resolve, reject);
+            xhr.onerror         = reject;
+            xhr.withCredentials = true;
 
-                        if (xhr.status >= 200 && xhr.status < 400) {
-                            resolve(xhr.responseText);
-                        } else {
-                            if (isBackendError(body)) {
-                                store.dispatch(actions.setInfoBannerMessage("error", `${ body.error }: ${ body.message }`));
-                                reject(body);
-                            } else {
-                                reject(xhr);
-                            }
-                        }
-                    } catch (e) {
-                        console.error(e);
-                        reject(xhr);
-                    }
-                };
+            if (req.responseType) {
+                xhr.responseType = req.responseType;
+            }
 
-                xhr.onerror = reject;
-
-                xhr.withCredentials = true;
-
-                if (req.headers) {
-                    for (const [ key, value ] of Object.entries(req.headers)) {
-                        xhr.setRequestHeader(key, value);
-                    }
+            if (req.headers) {
+                for (const [ key, value ] of Object.entries(req.headers)) {
+                    xhr.setRequestHeader(key, value);
                 }
+            }
 
-                if (body && typeof body !== "string") {
-                    xhr.setRequestHeader("Content-Type", "application/json");
-                    body = JSON.stringify(req.body);
-                }
+            if (body && typeof body !== "string") {
+                xhr.setRequestHeader("Content-Type", "application/json");
+                body = JSON.stringify(req.body);
+            }
 
-                xhr.send(body);
-            },
-        );
+            xhr.send(body);
+        });
     }
 }
