@@ -1,5 +1,7 @@
+import { UUID } from "./types";
+
 export interface Profile {
-    id: string;
+    id: UUID;
     mail: string;
     firstname: string;
     lastname: string;

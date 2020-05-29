@@ -18,7 +18,7 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <createTable tableName="profile_topic">
+        <createTable tableName="profile_message">
             <column name="user_id" type="uuid">
                 <constraints primaryKey="true" primaryKeyName="user_message_pkey" nullable="false"
                              foreignKeyName="user_fkey" referencedTableName="users" referencedColumnNames="id"/>

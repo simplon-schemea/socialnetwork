@@ -1,6 +1,6 @@
 import { Action } from "redux";
-import { InfoBannerType } from "../models/info-banner-type";
-import { Profile } from "../models/profile";
+import { InfoBannerType } from "@models/info-banner-type";
+import { Profile } from "@models/profile";
 
 function createAction<Type extends string>(type: Type): Action<Type>;
 function createAction<Type extends string, Props>(type: Type, props: Props): Action<Type> & Props;

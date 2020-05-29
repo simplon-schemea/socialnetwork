@@ -1,6 +1,6 @@
 import { Actions, ActionsTypes } from "./actions";
-import { InfoBannerType } from "../models/info-banner-type";
-import { Profile } from "../models/profile";
+import { InfoBannerType } from "@models/info-banner-type";
+import { Profile } from "@models/profile";
 
 export interface State {
     infoBanner?: {

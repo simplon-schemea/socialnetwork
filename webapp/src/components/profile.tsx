@@ -8,6 +8,9 @@ import { store } from "../store";
 import { actions } from "../store/actions";
 import { useSelector } from "react-redux";
 import { State } from "../store/reducer";
+import { MessageFormComponent } from "./message-form";
+import { MessageListComponent } from "./message-list";
+import { MessageType } from "../models/message-type";
 
 interface Props {
     id?: string;
@@ -59,6 +62,8 @@ export const ProfileComponent = withRouter(function ({ history, ...props }: Rout
             <Button variant="outlined" onClick={ logout }>
                 logout
             </Button>
+            <MessageListComponent type={ MessageType.PROFILE } topic={ profile.id }/>
+            <MessageFormComponent/>
         </div>
     );
 });

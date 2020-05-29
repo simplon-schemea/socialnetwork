@@ -56,12 +56,12 @@ const config: Configuration = {
     },
     plugins: [
         new CleanWebpackPlugin(),
-        new HtmlWebpackPlugin(),
+        new HtmlWebpackPlugin({ title: "Social Network" }),
         new CopyWebpackPlugin({
-            patterns: [{
+            patterns: [ {
                 from: path.join(__dirname, "assets"),
                 to: path.join(__dirname, "dist/assets"),
-            }],
+            } ],
         }),
     ],
     devServer: {

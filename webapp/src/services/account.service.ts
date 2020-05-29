@@ -1,7 +1,7 @@
-import { User, UserCredentials } from "../models/user";
+import { User, UserCredentials } from "@models/user";
 import { Http } from "./http.service";
 import { baseURL } from "../config";
-import { Profile } from "../models/profile";
+import { Profile } from "@models/profile";
 
 const endpoint = baseURL + "/account";
 

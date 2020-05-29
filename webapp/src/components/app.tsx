@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { LoginComponent } from "./login";
 import { BrowserRouter, Redirect, Route, RouteProps } from "react-router-dom";
 import { RegisterComponent } from "./register";
 import { Provider } from "react-redux";
-import { store } from "../store";
+import { store } from "@store";
 import { InfoBannerComponent } from "./info-banner";
-import { ProfileService } from "../services/profile.service";
-import { actions } from "../store/actions";
+import { ProfileService } from "@services/profile.service";
+import { actions } from "@store/actions";
 import { ProfileComponent } from "./profile";
 
 function AppRoute({ title, render, children, ...props }: { title: string } & RouteProps) {
@@ -20,11 +20,15 @@ function AppRoute({ title, render, children, ...props }: { title: string } & Rou
 }
 
 export function AppComponent() {
+    const [ sessionChecked, setSessionChecked ] = useState(false);
+
     useEffect(function () {
         ProfileService.get(null, true).then(function (profile) {
             store.dispatch(actions.loadProfile(profile));
+        }).finally(function () {
+            setSessionChecked(true);
         });
-    }, []);
+    }, [ setSessionChecked ]);
 
     return (
         <Provider store={ store }>
@@ -32,7 +36,7 @@ export function AppComponent() {
             <main>
                 <BrowserRouter>
                     <AppRoute title="Home" path="/" exact={ true }>
-                        <Redirect to="/login"/>
+                        { sessionChecked && <Redirect to={ store.getState().profile?.id ? "/profile" : "/login" }/> }
                     </AppRoute>
                     <AppRoute title="Login" path="/login" exact={ true }>
                         <LoginComponent/>

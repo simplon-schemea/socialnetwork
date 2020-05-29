@@ -2,11 +2,11 @@ import "./account-form.scss";
 
 import React, { ChangeEvent, FormEvent, useCallback, useState } from "react";
 import { Button, Input, InputLabel } from "@material-ui/core";
-import { UserCredentials } from "../models/user";
-import { AccountService } from "../services/account.service";
+import { UserCredentials } from "@models/user";
+import { AccountService } from "@services/account.service";
 import { withRouter } from "react-router-dom";
-import { store } from "../store";
-import { actions } from "../store/actions";
+import { store } from "@store";
+import { actions } from "@store/actions";
 
 export const LoginComponent = withRouter(function ({ history }) {
     const [ user, setUser ] = useState<UserCredentials>({

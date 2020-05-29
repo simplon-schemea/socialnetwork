@@ -1,10 +1,10 @@
 import "./info-banner.scss";
 import React, { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import { State } from "../store/reducer";
+import { State } from "@store/reducer";
 import classNames from "classnames";
-import { store } from "../store";
-import { actions } from "../store/actions";
+import { store } from "@store";
+import { actions } from "@store/actions";
 import { Transition } from "react-transition-group";
 
 
