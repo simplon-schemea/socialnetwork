@@ -1,5 +1,7 @@
 # A SOCIAL NETWORK?
 
+Server will be listening on http://localhost or https://localhost unless you use Docker Toolbox
+
 ### With Docker
 
 ```shell script

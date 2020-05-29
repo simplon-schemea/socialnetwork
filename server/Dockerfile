@@ -7,6 +7,7 @@ COPY settings.gradle .
 COPY build.gradle .
 COPY gradle gradle
 
+RUN dos2unix gradlew
 RUN sh gradlew deps
 
 COPY src src
