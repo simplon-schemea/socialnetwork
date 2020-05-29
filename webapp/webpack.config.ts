@@ -66,7 +66,7 @@ const config: Configuration = {
     ],
     devServer: {
         proxy: {
-            '/api': 'http://localhost:9000/'
+            "/api": `http://${ process.env.SN_API_HOST || "localhost" }:${ process.env.SN_API_PORT || 9000 }/`,
         },
         historyApiFallback: true
     }

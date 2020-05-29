@@ -1,9 +1,9 @@
 
 spring:
   datasource:
-    url: jdbc:postgresql://${DATABASE_HOST:localhost}:5432/socialnetwork
-    username: postgres
-    password: password
+    url: jdbc:postgresql://${SN_DATABASE_HOST:localhost}:${SN_DATABASE_PORT:5432}/socialnetwork
+    username: ${SN_DATABASE_USERNAME:postgres}
+    password: ${SN_DATABASE_PASSWORD:password}
   liquibase:
     liquibase-schema: public
     change-log: classpath:database/liquibase-changelog.xml
@@ -13,4 +13,4 @@ spring:
       ddl-auto: none
 
 server:
-  port: ${PORT:9000}
+  port: ${SN_API_PORT:9000}
