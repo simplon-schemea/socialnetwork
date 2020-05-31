@@ -16,6 +16,7 @@ services:
       context: server
     container_name: "socialnetwork-api"
     environment:
+      - SN_DATABASE_NAME=socialnetwork
       - SN_DATABASE_HOST=socialnetwork-database
       - SN_DATABASE_PORT=5432
       - SN_DATABASE_USERNAME=postgres

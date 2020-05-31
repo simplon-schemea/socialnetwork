@@ -13,9 +13,10 @@ Server will be listening on http://localhost:80 and https://localhost:443 unless
 
 ##### Configuring the Database
 
-By default the server will connect to a postgres databse as such:
+By default, the server will connect to a postgres database as such:
 
 ```
+DATABASE:   socialnetwork
 HOST:       localhost
 PORT:       5432
 USERNAME:   postgres
@@ -25,6 +26,7 @@ PASSWORD:   password
 This can be change using those environment variables:
 
 ```
+SN_DATABASE_NAME
 SN_DATABASE_HOST
 SN_DATABASE_PORT
 SN_DATABASE_USERNAME

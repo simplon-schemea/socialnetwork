@@ -1,7 +1,7 @@
 
 spring:
   datasource:
-    url: jdbc:postgresql://${SN_DATABASE_HOST:localhost}:${SN_DATABASE_PORT:5432}/socialnetwork
+    url: jdbc:postgresql://${SN_DATABASE_HOST:localhost}:${SN_DATABASE_PORT:5432}/${SN_DATABASE_NAME:socialnetwork}
     username: ${SN_DATABASE_USERNAME:postgres}
     password: ${SN_DATABASE_PASSWORD:password}
   liquibase:
