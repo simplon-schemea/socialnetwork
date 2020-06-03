@@ -7,7 +7,7 @@ import { UUID } from "@models/types";
 import { useSelector } from "react-redux";
 import { State } from "@store/reducer";
 import { StoreService } from "@services/store.service";
-import ReactMarkdown from "react-markdown";
+import { MessageComponent } from "./message";
 
 
 interface Props {
@@ -25,21 +25,7 @@ export function MessageListComponent(props: Props) {
     const messageElements = useMemo(function () {
         return messages
             .sort((a, b) => Date.parse(a.timestamp) - Date.parse(b.timestamp))
-            .map(msg => (
-                <div className="message" key={ msg.id }>
-                    <div className="author">
-                        <div className="author-inner">
-                            <div className="author-name">
-                                <span>{ msg.author.lastname }</span>&nbsp;
-                                <span>{ msg.author.firstname }</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="content">
-                        <ReactMarkdown source={ msg.content }/>
-                    </div>
-                </div>
-            ));
+            .map(msg => <MessageComponent message={ msg }/>);
     }, [ messages ]);
 
     return (

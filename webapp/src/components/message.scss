@@ -1,0 +1,89 @@
+.message-container {
+  &:not(:first-child) {
+    margin-top: 10px;
+  }
+
+  border: 1px solid #888;
+  border-radius: 5px;
+
+  display: flex;
+  flex-direction: row;
+
+  overflow: hidden;
+
+  .content {
+    padding: 0 10px;
+  }
+
+  .author {
+    position: relative;
+
+    background-color: #ccc;
+
+    min-height: 110px;
+    min-width: 100px;
+
+    border-right: 1px solid #888;
+
+    transition: background-color 200ms ease-out;
+
+    cursor: pointer;
+
+    > div {
+      position: relative;
+    }
+
+    &:hover {
+      background-color: #aaa;
+
+      .author-image {
+        filter: invert(0.95);
+      }
+    }
+
+    .author-image {
+      margin: 5px;
+
+      width: 90px;
+      height: 100px;
+      object-fit: cover;
+
+      transition: filter 250ms ease-in 250ms;
+    }
+
+    .author-name-wrapper {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      bottom: 0;
+      box-sizing: border-box;
+      overflow: hidden;
+
+      white-space: nowrap;
+
+      .author-name {
+        font-size: 0.9em;
+        background-color: #333c;
+        color: white;
+        border: 1px solid white;
+        border-radius: 5px;
+        padding: 2px 7px;
+        margin: auto 0 5px;
+
+        text-transform: capitalize;
+
+        cursor: pointer;
+
+        :first-child {
+          text-transform: uppercase;
+        }
+
+        justify-self: flex-end;
+
+      }
+    }
+
+  }
+}

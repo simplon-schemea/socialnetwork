@@ -8,7 +8,10 @@ export namespace StoreService {
     export function updateMessageList(topic: UUID, response: MessageResponseResource) {
         const data = response.messages.map((msg): MessageData => ({
             ...msg,
-            author: response.authors[msg.author],
+            author: {
+                ...response.authors[msg.author],
+                id: msg.author,
+            },
         }));
 
         store.dispatch(actions.updateMessageList(topic, data));

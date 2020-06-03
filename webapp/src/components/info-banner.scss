@@ -2,12 +2,10 @@
 .info-banner-container {
   @keyframes info-in {
     0% {
-      position: relative;
       top: -50px;
       opacity: 0.5;
     }
     100% {
-      position: relative;
       top: 0;
       opacity: 1;
     }
@@ -15,16 +13,19 @@
 
   @keyframes info-out {
     0% {
-      position: relative;
       top: 0;
       opacity: 1;
     }
     100% {
-      position: relative;
       top: -50px;
       opacity: 0.5;
     }
   }
+
+  position: fixed;
+  z-index: 1000;
+
+  width: 100vw;
 
   padding: 10px;
   display: flex;
@@ -33,12 +34,12 @@
 
   &.error {
     color: red;
-    background-color: #fbbb;
+    background-color: #fbbd;
   }
 
   &.success {
     color: green;
-    background-color: #bfbb;
+    background-color: #bfbd;
   }
 
   &.entering, &.exiting {

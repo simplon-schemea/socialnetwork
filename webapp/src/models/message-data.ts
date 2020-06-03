@@ -3,7 +3,7 @@ import { AuthorResource } from "./resources/message-response-resource";
 
 export interface MessageData {
     id: UUID;
-    author: AuthorResource;
+    author: AuthorResource & { id: UUID };
     content: string;
     timestamp: string;
 }
