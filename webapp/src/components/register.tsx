@@ -1,11 +1,20 @@
 import "./account-form.scss";
 
-import React, { ChangeEvent, Dispatch, FormEvent, SetStateAction, useCallback, useEffect, useState } from "react";
-import { Button, Input, InputLabel } from "@material-ui/core";
-import { User } from "../models/user";
-import { AccountService } from "../services/account.service";
+import React, {
+    ChangeEvent,
+    Dispatch,
+    FormEvent,
+    SetStateAction,
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
+import { Button, Input, InputLabel, InputProps } from "@material-ui/core";
+import { User } from "@models/user";
+import { AccountService } from "@services/account.service";
 import { useStore } from "react-redux";
-import { actions } from "../store/actions";
+import { actions } from "@store/actions";
 import { withRouter } from "react-router-dom";
 
 function setStateField<S>(state: S, setState: Dispatch<SetStateAction<S>>, field: keyof S) {
@@ -15,7 +24,37 @@ function setStateField<S>(state: S, setState: Dispatch<SetStateAction<S>>, field
     }), [ state, setState ]);
 }
 
-export const RegisterComponent = withRouter(function ({ history }) {
+const AuthInput = React.forwardRef(function AuthInputImpl({ label, ...props }: InputProps & { label: string }, ref) {
+    const valueRef = useRef<string>();
+
+    const onBlur = useCallback(function (event: React.FocusEvent<HTMLInputElement>) {
+        const { target, target: { value } } = event;
+
+        if (valueRef.current !== value) {
+            target.reportValidity();
+            console.log("afet");
+            valueRef.current = value;
+        }
+    }, []);
+
+    function log(e: any) {
+        e.persist();
+        console.log(e);
+    }
+
+
+    return (
+        <React.Fragment>
+            <InputLabel required={ props.required } variant="standard">{ label }
+            </InputLabel>
+            <Input placeholder={ label } required={ true } onBlur={ onBlur } ref={ ref } onInvalid={ log }
+                   onFocus={ log }
+                   autoComplete={ props.type === "password" ? undefined : name } { ...props }/>
+        </React.Fragment>
+    );
+});
+
+export const RegisterComponent = withRouter(function Register({ history }) {
     const [ user, setUser ] = useState<User>({
         mail: "",
         password: "",
@@ -65,31 +104,23 @@ export const RegisterComponent = withRouter(function ({ history }) {
     return (
         <form className="account-form" onSubmit={ register }>
             <div className="grid">
-                <InputLabel required={ true } variant="standard">Email
-                </InputLabel>
-                <Input name="mail" placeholder="Email" required={ true } type="email" value={ user.mail }
-                       autoComplete="email"
-                       onChange={ setMail }/>
+                <AuthInput name="mail" label="Email" required={ true } type="email" value={ user.mail }
+                           onChange={ setMail }/>
 
-                <InputLabel required={ true } variant="standard">Password</InputLabel>
-                <Input name="password" placeholder="Password" required={ true } type="password"
-                       value={ user.password } onChange={ setPassword }/>
+                <AuthInput name="password" label="Password" required={ true } type="password"
+                           value={ user.password } onChange={ setPassword }/>
 
-                <InputLabel required={ true } variant="standard">Password Confirmation</InputLabel>
-                <Input placeholder="Password Confirmation" required={ true } type="password" ref={ setPasswordBisInput }
-                       value={ state.passwordBis } onChange={ setPasswordBis }/>
+                <AuthInput label="Password Confirmation" required={ true } type="password" ref={ setPasswordBisInput }
+                           value={ state.passwordBis } onChange={ setPasswordBis }/>
 
-                <InputLabel required={ true } variant="standard">Firstname</InputLabel>
-                <Input name="firstname" placeholder="Firstname" required={ true }
-                       value={ user.firstname } onChange={ setFirstname }/>
+                <AuthInput name="firstname" label="Firstname" required={ true }
+                           value={ user.firstname } onChange={ setFirstname }/>
 
-                <InputLabel required={ true } variant="standard">Lastname</InputLabel>
-                <Input name="lastname" placeholder="Lastname" required={ true }
-                       value={ user.lastname } onChange={ setLastname }/>
+                <AuthInput name="lastname" label="Lastname" required={ true }
+                           value={ user.lastname } onChange={ setLastname }/>
 
-                <InputLabel variant="standard">Birthday</InputLabel>
-                <Input name="birthday" placeholder="Birthday" required={ false }
-                       value={ user.birthday } onChange={ setBirthday }/>
+                <AuthInput name="birthday" label="Birthday" required={ false }
+                           value={ user.birthday } onChange={ setBirthday }/>
             </div>
             <div className="footer">
                 <Button variant="outlined" type="submit">register</Button>

@@ -1,6 +1,8 @@
 import { Action } from "redux";
 import { InfoBannerType } from "@models/info-banner-type";
-import { Profile } from "@models/profile";
+import { ProfileResource } from "@models/resources/profile-resource";
+import { UUID } from "@models/types";
+import { MessageData } from "@models/message-data";
 
 function createAction<Type extends string>(type: Type): Action<Type>;
 function createAction<Type extends string, Props>(type: Type, props: Props): Action<Type> & Props;
@@ -14,7 +16,8 @@ function createAction<Type extends string>(type: Type, props = {}): Action<Type>
 export enum ActionsTypes {
     setInfoBannerMessage = "[NOTIFICATION] Set message",
     clearInfoBanner      = "[NOTIFICATION] Clear",
-    loadProfile          = "[API] Load profile"
+    loadProfile          = "[API] Load profile",
+    updateMessageList    = "[API] Update message list"
 }
 
 export const actions = {
@@ -24,8 +27,11 @@ export const actions = {
     clearInfoBanner() {
         return createAction(ActionsTypes.clearInfoBanner);
     },
-    loadProfile(profile: Profile) {
+    loadProfile(profile: ProfileResource) {
         return createAction(ActionsTypes.loadProfile, { profile });
+    },
+    updateMessageList(topic: UUID, messages: MessageData[]) {
+        return createAction(ActionsTypes.updateMessageList, { topic, messages });
     },
 };
 

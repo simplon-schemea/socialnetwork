@@ -3,13 +3,11 @@ package org.socialnetwork.repositories;
 import lombok.RequiredArgsConstructor;
 import org.socialnetwork.entities.MessageEntity;
 import org.socialnetwork.models.MessageType;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @Repository
@@ -25,8 +23,8 @@ public class CustomMessageRepository {
         return query.getResultList();
     }
 
-    public void link(String table, UUID profile, UUID message) {
-        final var query = em.createNativeQuery(MessageFormat.format("INSERT INTO {0} VALUES(?, ?)", table));
+    public void link(MessageType type, UUID profile, UUID message) {
+        final var query = em.createNativeQuery(MessageFormat.format("INSERT INTO {0} VALUES(?, ?)", type.getTable()));
 
         query.setParameter(1, profile);
         query.setParameter(2, message);

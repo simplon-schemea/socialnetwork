@@ -5,16 +5,14 @@ import org.socialnetwork.config.Routes;
 import org.socialnetwork.models.MessageType;
 import org.socialnetwork.resources.MessageResource;
 import org.socialnetwork.resources.MessageCreationResource;
+import org.socialnetwork.resources.MessageResponseResource;
 import org.socialnetwork.services.MessageService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -29,7 +27,7 @@ public class MessageController {
     }
 
     @GetMapping("/list")
-    Set<MessageResource> list(@RequestParam MessageType type, @RequestParam UUID topic) {
+    MessageResponseResource list(@RequestParam MessageType type, @RequestParam UUID topic) {
         return service.findAllByTopic(type, topic);
     }
 

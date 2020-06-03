@@ -1,29 +1,28 @@
 import { baseURL } from "../config";
 import { Http } from "./http.service";
 import { MessageType } from "@models/message-type";
-import { store } from "@store";
 import { UUID } from "@models/types";
-import { Message } from "@models/message";
+import { MessageResponseResource } from "@models/resources/message-response-resource";
 
 const endpoint = baseURL + "/messages";
 
 export namespace MessageService {
-    export function send(content: string) {
+    export function send(type: MessageType, topic: UUID, content: string) {
         return Http.request({
             url: endpoint,
             body: {
                 content,
-                type: MessageType.PROFILE,
-                topic: store.getState().profile?.id,
+                type,
+                topic,
             },
         });
     }
 
     export function list(type: MessageType, topic: UUID) {
-        return Http.request<Message[]>({
+        return Http.request<MessageResponseResource>({
             url: endpoint + "/list",
             params: { type, topic },
-            responseType: "json"
-        })
+            responseType: "json",
+        });
     }
 }

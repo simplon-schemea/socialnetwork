@@ -1,0 +1,38 @@
+###
+POST http://localhost:9000/api/account/register
+Content-Type: application/json
+
+{
+  "mail": "user@domain.com",
+  "password": "123456",
+  "firstname": "some",
+  "lastname": "one"
+}
+
+> csrf.js
+
+###
+POST http://localhost:9000/api/account/login
+Content-Type: application/json
+
+{
+  "mail": "user@domain.com",
+  "password": "123456"
+}
+
+> 200.js
+
+###
+POST http://localhost:9000/api/messages
+Content-Type: application/json
+X-XSRF-TOKEN: {{csrf}}
+
+{
+  "content": "TEST",
+  "type": "PROFILE"
+}
+
+> 200.js
+
+###
+

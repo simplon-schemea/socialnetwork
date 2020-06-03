@@ -1,7 +1,7 @@
 import { User, UserCredentials } from "@models/user";
 import { Http } from "./http.service";
 import { baseURL } from "../config";
-import { Profile } from "@models/profile";
+import { ProfileResource } from "@models/resources/profile-resource";
 
 const endpoint = baseURL + "/account";
 
@@ -15,11 +15,11 @@ export namespace AccountService {
     }
 
     export function login(user: UserCredentials) {
-        return Http.request<Profile>({
+        return Http.request<ProfileResource>({
             url: endpoint + "/login",
             body: user,
             responseType: "json",
-            followRedirect: true
+            followRedirect: true,
         });
     }
 

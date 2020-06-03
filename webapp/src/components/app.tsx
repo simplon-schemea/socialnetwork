@@ -19,24 +19,34 @@ function AppRoute({ title, render, children, ...props }: { title: string } & Rou
     );
 }
 
+enum LoggedState {
+    UNKNOWN,
+    LOGGED,
+    GUEST
+}
+
 export function AppComponent() {
-    const [ sessionChecked, setSessionChecked ] = useState(false);
+    const [ logged, setLogged ] = useState<LoggedState>(LoggedState.UNKNOWN);
 
     useEffect(function () {
-        ProfileService.get(null, true).then(function (profile) {
-            store.dispatch(actions.loadProfile(profile));
-        }).finally(function () {
-            setSessionChecked(true);
-        });
-    }, [ setSessionChecked ]);
+        ProfileService.get(null, true)
+            .then(function (profile) {
+                store.dispatch(actions.loadProfile(profile));
+                setLogged(LoggedState.LOGGED);
+            })
+            .catch(function () {
+                setLogged(LoggedState.GUEST);
+            });
+    }, [ setLogged ]);
 
     return (
         <Provider store={ store }>
             <InfoBannerComponent/>
             <main>
                 <BrowserRouter>
+                    { logged === LoggedState.GUEST && <Redirect to="/login"/> }
                     <AppRoute title="Home" path="/" exact={ true }>
-                        { sessionChecked && <Redirect to={ store.getState().profile?.id ? "/profile" : "/login" }/> }
+                        { logged !== LoggedState.LOGGED && <Redirect to="/profile"/> }
                     </AppRoute>
                     <AppRoute title="Login" path="/login" exact={ true }>
                         <LoginComponent/>

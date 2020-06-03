@@ -8,12 +8,6 @@ import { CleanWebpackPlugin } from "clean-webpack-plugin";
 
 let mode: Configuration["mode"];
 
-declare module "webpack" {
-    interface Configuration {
-        devServer: any;
-    }
-}
-
 switch (process.env.NODE_ENV) {
     case "development":
     case "production":
@@ -25,7 +19,7 @@ switch (process.env.NODE_ENV) {
         break;
 }
 
-console.log(`MODE: ${ mode }`);
+console.log(`MODE: ${ mode }\n`);
 
 const config: Configuration = {
     entry: path.join(__dirname, "src/main.ts"),

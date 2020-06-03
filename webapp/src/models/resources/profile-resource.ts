@@ -1,6 +1,6 @@
-import { UUID } from "./types";
+import { UUID } from "../types";
 
-export interface Profile {
+export interface ProfileResource {
     id: UUID;
     mail: string;
     firstname: string;

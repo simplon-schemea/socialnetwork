@@ -8,7 +8,7 @@ import { withRouter } from "react-router-dom";
 import { store } from "@store";
 import { actions } from "@store/actions";
 
-export const LoginComponent = withRouter(function ({ history }) {
+export const LoginComponent = withRouter(function Login({ history }) {
     const [ user, setUser ] = useState<UserCredentials>({
         mail: "",
         password: "",

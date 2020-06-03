@@ -21,8 +21,7 @@ export function InfoBannerComponent() {
                 clearTimeout(timerID.current);
             }
 
-            // @ts-ignore
-            timerID.current = setTimeout(function () {
+            timerID.current = window.setTimeout(function () {
                 timerID.current = 0;
                 store.dispatch(actions.clearInfoBanner());
             }, 5 * 1000);

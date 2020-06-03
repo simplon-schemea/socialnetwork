@@ -47,11 +47,13 @@ export namespace Http {
 
                     reject(errors);
                 } else {
+                    store.dispatch(actions.setInfoBannerMessage("error", "Unknown error"));
                     reject(this);
                 }
             }
         } catch (e) {
             console.error(e);
+            store.dispatch(actions.setInfoBannerMessage("error", "Unknown error"));
             reject(this);
         }
     }

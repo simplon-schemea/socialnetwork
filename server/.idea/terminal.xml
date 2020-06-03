@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="TerminalProjectOptionsProvider">
+    <envs>
+      <env key="PUBSUB_PROJECT_ID" value="socialnetwork" />
+      <env key="PUBSUB_EMULATOR_HOST" value="localhost:8085" />
+    </envs>
+  </component>
+</project>

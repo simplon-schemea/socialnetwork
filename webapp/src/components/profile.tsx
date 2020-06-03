@@ -1,16 +1,16 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { ProfileService } from "../services/profile.service";
+import { ProfileService } from "@services/profile.service";
 import { Button } from "@material-ui/core";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { Profile } from "../models/profile";
-import { AccountService } from "../services/account.service";
-import { store } from "../store";
-import { actions } from "../store/actions";
+import { AccountService } from "@services/account.service";
+import { store } from "@store";
+import { actions } from "@store/actions";
 import { useSelector } from "react-redux";
-import { State } from "../store/reducer";
+import { State } from "@store/reducer";
 import { MessageFormComponent } from "./message-form";
 import { MessageListComponent } from "./message-list";
-import { MessageType } from "../models/message-type";
+import { MessageType } from "@models/message-type";
+import { ProfileResource } from "@models/resources/profile-resource";
 
 interface Props {
     id?: string;
@@ -28,8 +28,8 @@ function calculateAge(birthday: Date) {
     return age - (yearLess(now) < yearLess(birthday) ? 1 : 0);
 }
 
-export const ProfileComponent = withRouter(function ({ history, ...props }: RouteComponentProps<any> & Props) {
-    const [ profile, setProfile ] = useState<Profile>();
+export const ProfileComponent = withRouter(function Profile({ history, ...props }: RouteComponentProps<any> & Props) {
+    const [ profile, setProfile ] = useState<ProfileResource>();
 
     const storeProfile = useSelector((state: State) => state.profile);
 
@@ -57,13 +57,13 @@ export const ProfileComponent = withRouter(function ({ history, ...props }: Rout
     return (
         <div>
             { profile.firstname } { profile.lastname }
-            { profile.birthday && `born in ${ profile.birthday }, is now ${ calculateAge(new Date(profile.birthday)) } years old` }
+            { profile.birthday && ` born in ${ profile.birthday }, is now ${ calculateAge(new Date(profile.birthday)) } years old` }
             <br/>
             <Button variant="outlined" onClick={ logout }>
                 logout
             </Button>
             <MessageListComponent type={ MessageType.PROFILE } topic={ profile.id }/>
-            <MessageFormComponent/>
+            <MessageFormComponent type={ MessageType.PROFILE } topic={ profile.id }/>
         </div>
     );
 });

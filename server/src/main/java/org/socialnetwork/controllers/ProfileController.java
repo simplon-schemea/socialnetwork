@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.socialnetwork.config.Routes;
 import org.socialnetwork.resources.ProfileResource;
 import org.socialnetwork.services.ProfileService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import java.util.UUID;
 public class ProfileController {
     private final ProfileService service;
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping
     public ProfileResource get() {
         return service.getProfileFromSession();

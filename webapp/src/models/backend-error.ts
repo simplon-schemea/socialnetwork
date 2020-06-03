@@ -18,5 +18,5 @@ export interface BackendError {
 
 
 export function isBackendError(value: any): value is BackendError{
-    return value.message && value.error && value.status;
+    return value && value.message && value.error && value.status;
 }
