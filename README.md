@@ -1,5 +1,6 @@
 # A SOCIAL NETWORK?
 
+Post ECF improvements are in the [post-ecf](/../../tree/post-ecf) branch
 
 ### With Docker
 
