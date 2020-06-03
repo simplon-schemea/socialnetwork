@@ -1,12 +1,11 @@
 import "./info-banner.scss";
-import React, { useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import React, { useCallback, useEffect, useRef } from "react";
+import { useSelector, useStore } from "react-redux";
 import { State } from "@store/reducer";
 import classNames from "classnames";
-import { store } from "@store";
 import { actions } from "@store/actions";
 import { Transition } from "react-transition-group";
-
+import { Close } from "@material-ui/icons";
 
 export function InfoBannerComponent() {
     const errors = useSelector((state: State) => state.infoBanner);
@@ -14,6 +13,12 @@ export function InfoBannerComponent() {
     const timerID = useRef<number | null>(null);
 
     const ref = useRef<HTMLDivElement | null>(null);
+
+    const store = useStore<State>();
+
+    const close = useCallback(function () {
+        store.dispatch(actions.clearInfoBanner());
+    }, [ store ]);
 
     useEffect(function () {
         if (errors) {
@@ -41,8 +46,11 @@ export function InfoBannerComponent() {
         <React.Fragment>
             <Transition in={ !!errors } timeout={ 300 } mountOnEnter={ true } unmountOnExit={ true }>
                 { (state) => displayedErrors && (
-                    <div ref={ ref } className={ classNames("info-banner-container", displayedErrors.type, state) }>
-                        { displayedErrors.message }
+                    <div className={ classNames("info-banner-container", state) }>
+                        <div ref={ ref } className={ classNames(displayedErrors.type, state) }>
+                            { displayedErrors.message }
+                            <Close className="icon" onClick={ close }/>
+                        </div>
                     </div>
                 ) }
             </Transition>

@@ -2,56 +2,99 @@
 .info-banner-container {
   @keyframes info-in {
     0% {
-      top: -50px;
+      transform: translateY(-100%);
       opacity: 0.5;
     }
     100% {
-      top: 0;
+      transform: translateY(0);
       opacity: 1;
     }
   }
 
   @keyframes info-out {
     0% {
-      top: 0;
+      transform: translateY(0);
       opacity: 1;
     }
     100% {
-      top: -50px;
+      transform: translateY(-100%);
       opacity: 0.5;
     }
   }
 
-  position: fixed;
+  @keyframes box-in {
+    0% {
+      height: 0;
+    }
+    100% {
+      height: 38px;
+    }
+  }
+
+  @keyframes box-out {
+    0% {
+      height: 38px;
+    }
+    100% {
+      height: 0;
+    }
+  }
+
+  position: sticky;
+  top: 0;
+
   z-index: 1000;
 
-  width: 100vw;
+  width: calc(100% - 20px);
 
-  padding: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  &.error {
-    color: red;
-    background-color: #fbbd;
-  }
-
-  &.success {
-    color: green;
-    background-color: #bfbd;
-  }
-
-  &.entering, &.exiting {
-    animation-duration: 300ms;
-    animation-fill-mode: both;
-  }
+  animation-duration: 300ms;
+  animation-fill-mode: both;
 
   &.entering {
-    animation-name: info-in;
+    animation-name: box-in;
   }
 
   &.exiting {
-    animation-name: info-out;
+    animation-name: box-out;
+  }
+
+  > div {
+    position: relative;
+
+    padding: 10px;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    animation-duration: inherit;
+    animation-fill-mode: inherit;
+
+    &.error {
+      color: red;
+      background-color: #fbbd;
+    }
+
+    &.success {
+      color: green;
+      background-color: #bfbd;
+    }
+
+
+    &.entering {
+      animation-name: info-in;
+    }
+
+    &.exiting {
+      animation-name: info-out;
+    }
+
+    .icon {
+      position: absolute;
+      right: 5px;
+      cursor: pointer;
+      color: #333;
+    }
   }
 }
