@@ -10,7 +10,9 @@ import React, {
     useRef,
     useState,
 } from "react";
-import { Button, Input, InputLabel, InputProps } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import Input, { InputProps } from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
 import { User } from "@models/user";
 import { AccountService } from "@services/account.service";
 import { useStore } from "react-redux";

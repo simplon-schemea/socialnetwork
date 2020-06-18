@@ -27,9 +27,10 @@ export namespace Http {
 
                     if (location) {
                         Http.request({
-                            ...request,
                             method: "GET",
                             url: location,
+                            followRedirect: true,
+                            silent: request.silent,
                         }).then(resolve);
 
                         return;
@@ -58,18 +59,10 @@ export namespace Http {
         }
     }
 
-    export function csrf() {
-        const cookies = document.cookie
-            .split(";")
-            .map(x => x.split("=").map(x => x.trim()))
-            .reduce((prev, [ key, value ]) => Object.assign(prev, { [key]: value }), {} as StringMap);
-
-        return cookies["XSRF-TOKEN"];
-    }
-
     export function request(req: string): Promise<string>;
     export function request(req: Request): Promise<unknown>;
     export function request(req: Request & { responseType: "text" | undefined | null }): Promise<string>;
+    export function request<T extends string>(req: Request & { responseType: "text" | undefined | null }): Promise<T>;
     export function request<T>(req: Request & { responseType: "json" }): Promise<T>;
     export function request<T>(req: Request | string) {
         return new Promise<T>(function (resolve, reject) {
@@ -108,10 +101,10 @@ export namespace Http {
             }
 
             {
-                const token = csrf();
+                const token = localStorage.getItem("token");
 
                 if (token) {
-                    xhr.setRequestHeader("X-XSRF-TOKEN", token);
+                    xhr.setRequestHeader("Authorization", `Bearer ${token}`);
                 }
             }
 

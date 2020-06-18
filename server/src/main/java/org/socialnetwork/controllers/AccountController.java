@@ -26,10 +26,8 @@ public class AccountController {
     }
 
     @PostMapping("/login")
-    ResponseEntity<Void> login(@RequestBody @Valid AccountLoginResource input) throws URISyntaxException {
-        return ResponseEntity.ok()
-                .location(new URI(Routes.PROFILES + "/" + service.login(input)))
-                .build();
+    ResponseEntity<String> login(@RequestBody @Valid AccountLoginResource input) throws URISyntaxException {
+        return ResponseEntity.ok(service.login(input));
     }
 
     @GetMapping("/logout")

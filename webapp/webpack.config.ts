@@ -6,6 +6,7 @@ import CopyWebpackPlugin from "copy-webpack-plugin";
 import { TsConfigPathsPlugin } from "awesome-typescript-loader";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
 
+
 let mode: Configuration["mode"];
 
 switch (process.env.NODE_ENV) {
@@ -19,7 +20,11 @@ switch (process.env.NODE_ENV) {
         break;
 }
 
-console.log(`MODE: ${ mode }\n`);
+const isJSON = process.argv.includes("--json");
+
+if (!isJSON) {
+    console.log(`MODE: ${ mode }\n`);
+}
 
 const config: Configuration = {
     entry: path.join(__dirname, "src/main.ts"),
@@ -30,7 +35,12 @@ const config: Configuration = {
         rules: [
             {
                 test: /\.tsx?$/,
-                loader: "awesome-typescript-loader",
+                use: {
+                    loader: "awesome-typescript-loader",
+                    options: {
+                        silent: isJSON,
+                    },
+                },
             },
             {
                 test: /\.scss$/,
@@ -68,6 +78,11 @@ const config: Configuration = {
 
 if (mode === "development") {
     config.devtool = "source-map";
+} else {
+    config.optimization = {
+        ...config.optimization,
+        usedExports: true,
+    };
 }
 
 export default config;

@@ -15,11 +15,10 @@ export namespace AccountService {
     }
 
     export function login(user: UserCredentials) {
-        return Http.request<ProfileResource>({
+        return Http.request<string>({
             url: endpoint + "/login",
             body: user,
-            responseType: "json",
-            followRedirect: true,
+            responseType: "text",
         });
     }
 

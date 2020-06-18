@@ -3,6 +3,7 @@ package org.socialnetwork.services;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.socialnetwork.entities.MessageEntity;
+import org.socialnetwork.entities.UserEntity;
 import org.socialnetwork.models.MessageType;
 import org.socialnetwork.repositories.CustomMessageRepository;
 import org.socialnetwork.repositories.MessageRepository;
@@ -61,6 +62,9 @@ public class MessageService {
     @Transactional
     public UUID createMessage(MessageCreationResource resource) {
         final MessageType type = resource.getType();
+        final UserEntity author = UserEntity.builder()
+                .id(accountService.getUserID().orElseThrow())
+                .build();
 
         if (Objects.isNull(resource.getTopic()) && resource.getType() == MessageType.PROFILE) {
             resource.setTopic(accountService.getUserID().orElseThrow());
@@ -72,7 +76,7 @@ public class MessageService {
 
         MessageEntity entity = mapper.map(resource, MessageEntity.class);
 
-        entity.setAuthor(accountService.getUser().orElseThrow());
+        entity.setAuthor(author);
         entity.setTimestamp(new Timestamp(System.currentTimeMillis()));
 
         entity = repository.save(entity);

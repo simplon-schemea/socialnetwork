@@ -1,6 +1,6 @@
 import "./message-form.scss";
-import { Button } from "@material-ui/core";
-import { Send } from "@material-ui/icons";
+import Button from "@material-ui/core/Button";
+import Send from "@material-ui/icons/Send";
 import React, { FormEvent, useCallback, useState } from "react";
 import { MessageService } from "@services/message.service";
 import { store } from "@store";

@@ -10,8 +10,7 @@
     "@types/react-router-dom": "^5.1.5",
     "@types/react-transition-group": "^4.4.0",
     "@types/webpack-dev-server": "^3.11.0",
-    "awesome-typescript-loader": "latest",
-    "bbcode-to-react": "^0.2.9",
+    "awesome-typescript-loader": "^5.2.1",
     "classnames": "^2.2.6",
     "clean-webpack-plugin": "latest",
     "copy-webpack-plugin": "latest",
@@ -28,16 +27,22 @@
     "sass": "latest",
     "sass-loader": "latest",
     "style-loader": "latest",
+    "ts-loader": "^7.0.5",
     "ts-node": "latest",
+    "tsconfig-paths-webpack-plugin": "^3.2.0",
     "typescript": "latest",
     "webpack": "latest",
     "webpack-cli": "latest"
   },
   "scripts": {
     "build": "webpack",
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "analyze": "webpack --profile --json > stats.json && webpack-bundle-analyzer stats.json dist"
   },
   "devDependencies": {
+    "@types/webpack-bundle-analyzer": "^3.8.0",
+    "cross-env": "^7.0.2",
+    "webpack-bundle-analyzer": "^3.8.0",
     "webpack-dev-server": "latest"
   }
 }

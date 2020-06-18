@@ -4,6 +4,8 @@ import React, { useCallback } from "react";
 import ReactMarkdown from "react-markdown";
 import { MessageData } from "@models/message-data";
 import { useHistory } from "react-router";
+import Reply from "@material-ui/icons/Reply";
+import Button from "@material-ui/core/Button";
 
 
 interface Props {
@@ -32,6 +34,11 @@ export function MessageComponent({ message }: Props) {
             </div>
             <div className="content">
                 <ReactMarkdown source={ message.content }/>
+                <div className="content-footer">
+                    <Button className="fab" variant="outlined">
+                        <Reply fontSize="small"/>
+                    </Button>
+                </div>
             </div>
         </div>
     );

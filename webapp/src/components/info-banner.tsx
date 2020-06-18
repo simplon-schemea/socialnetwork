@@ -5,7 +5,7 @@ import { State } from "@store/reducer";
 import classNames from "classnames";
 import { actions } from "@store/actions";
 import { Transition } from "react-transition-group";
-import { Close } from "@material-ui/icons";
+import Close from "@material-ui/icons/Close";
 
 export function InfoBannerComponent() {
     const errors = useSelector((state: State) => state.infoBanner);

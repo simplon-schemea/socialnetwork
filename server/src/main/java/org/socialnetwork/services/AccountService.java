@@ -21,7 +21,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,6 +34,7 @@ public class AccountService {
     private final PasswordEncoder encoder;
     private final ModelMapper mapper;
     private final AuthenticationManager authenticationManager;
+    private final TokenService tokenService;
 
     private final RoleRepository roleRepository;
 
@@ -54,12 +54,12 @@ public class AccountService {
         }
     }
 
-    Optional<UserEntity> getUser() {
-        return getUserPrincipal().map(CustomUserPrincipal::getUser);
+    Optional<UUID> getUserID() {
+        return getUserPrincipal().map(CustomUserPrincipal::getUserID);
     }
 
-    Optional<UUID> getUserID() {
-        return getUser().map(UserEntity::getId);
+    Optional<UserEntity> getUser() {
+        return getUserID().map(id -> repository.findById(id).orElseThrow());
     }
 
     @Transactional
@@ -73,7 +73,7 @@ public class AccountService {
         return repository.save(entity).getId();
     }
 
-    public UUID login(AccountLoginResource input) {
+    public String login(AccountLoginResource input) {
         {
             CustomUserPrincipal user = getUserPrincipal().orElse(null);
 
@@ -94,11 +94,10 @@ public class AccountService {
         final Object principal = authentication.getPrincipal();
 
         if (principal instanceof CustomUserPrincipal) {
-            return ((CustomUserPrincipal) principal).getUser().getId();
+            return tokenService.generate((CustomUserPrincipal) principal);
         } else {
             throw new RuntimeException();
         }
-
     }
 
     public void logout() {

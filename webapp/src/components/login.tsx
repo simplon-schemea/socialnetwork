@@ -1,12 +1,15 @@
 import "./account-form.scss";
 
 import React, { ChangeEvent, FormEvent, useCallback, useState } from "react";
-import { Button, Input, InputLabel } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
 import { UserCredentials } from "@models/user";
 import { AccountService } from "@services/account.service";
 import { withRouter } from "react-router-dom";
 import { store } from "@store";
 import { actions } from "@store/actions";
+import { ProfileService } from "@services/profile.service";
 
 export const LoginComponent = withRouter(function Login({ history }) {
     const [ user, setUser ] = useState<UserCredentials>({
@@ -27,10 +30,19 @@ export const LoginComponent = withRouter(function Login({ history }) {
     const login = useCallback(function (event: FormEvent) {
         event.preventDefault();
 
-        AccountService.login(user).then(function (profile) {
+        AccountService.login(user).then(function (token) {
             store.dispatch(actions.setInfoBannerMessage("success", "Successfully logged in"));
-            store.dispatch(actions.loadProfile(profile));
+            localStorage.setItem("token", token);
 
+            const payload = JSON.parse(atob(token.split(".")[1]));
+
+            if (!payload.sub) {
+                throw new Error("invalid token");
+            }
+
+            return ProfileService.get(payload.sub);
+        }).then(function (profile) {
+            store.dispatch(actions.loadProfile(profile));
             history.push("/profile");
         });
     }, [ user ]);

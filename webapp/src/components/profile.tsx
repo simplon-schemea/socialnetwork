@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { ProfileService } from "@services/profile.service";
-import { Button } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { AccountService } from "@services/account.service";
 import { store } from "@store";

@@ -7,3 +7,10 @@ body{
 main {
   padding: 10px;
 }
+
+button.fab {
+  padding: 7px;
+  border-radius: 50%;
+  min-width: unset;
+  border: none;
+}

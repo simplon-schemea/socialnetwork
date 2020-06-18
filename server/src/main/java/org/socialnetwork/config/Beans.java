@@ -2,6 +2,7 @@ package org.socialnetwork.config;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.socialnetwork.filters.JwtFilter;
 import org.socialnetwork.services.CustomUserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

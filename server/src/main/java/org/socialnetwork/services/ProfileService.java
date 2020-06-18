@@ -18,12 +18,12 @@ public class ProfileService {
     private final AccountService accountService;
     private final MessageService messageService;
 
-    public ProfileResource getProfileFromSession() {
-        return accountService.getUser().map(user -> mapper.map(user, ProfileResource.class)).orElseThrow();
-    }
-
     public ProfileResource findByUserID(UUID id) {
         final UserEntity entity = repository.findById(id).orElseThrow();
         return mapper.map(entity, ProfileResource.class);
+    }
+
+    public ProfileResource getProfileFromSession() {
+        return findByUserID(accountService.getUserID().orElseThrow());
     }
 }

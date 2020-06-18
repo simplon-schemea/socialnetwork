@@ -2,6 +2,6 @@
 <project version="4">
   <component name="JavaScriptLibraryMappings">
     <file url="file://$PROJECT_DIR$/http/200.js" libraries="{HTTP Response Handler}" />
-    <file url="file://$PROJECT_DIR$/http/csrf.js" libraries="{HTTP Response Handler}" />
+    <file url="file://$PROJECT_DIR$/http/login.js" libraries="{HTTP Response Handler}" />
   </component>
 </project>

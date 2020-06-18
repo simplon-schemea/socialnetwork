@@ -22,8 +22,15 @@ services:
       - SN_DATABASE_USERNAME=postgres
       - SN_DATABASE_PASSWORD=password
       - SN_API_PORT=9000
+      - SN_CERTIFICATE=/run/secrets/certificate
+      - SN_PRIVATE_KEY=/run/secrets/private_key
+    secrets:
+      - certificate
+      - private_key
     links:
       - postgres:socialnetwork-database
+    ports:
+      - 9000:9000
   webapp:
     build:
       context: webapp
@@ -33,8 +40,16 @@ services:
       - SN_API_PORT=9000
     links:
       - api:socialnetwork-api
+    secrets:
+      - certificate
+      - private_key
     ports:
       - 80:80
       - 443:443
 volumes:
   pgdata:
+secrets:
+  certificate:
+    file: ssl/certificate.crt
+  private_key:
+    file: ssl/privkey.pem
