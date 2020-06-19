@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { LoginComponent } from "./login";
 import { BrowserRouter, Redirect, Route, RouteProps } from "react-router-dom";
 import { RegisterComponent } from "./register";
@@ -9,6 +9,8 @@ import { ProfileService } from "@services/profile.service";
 import { actions } from "@store/actions";
 import { ProfileComponent } from "./profile";
 import { PersistentStorage } from "../storage/persistent-storage";
+import { HttpContext, HttpProvider } from "../http";
+import { ProfileResource } from "@models/resources/profile-resource";
 
 function AppRoute({ title, render, children, ...props }: { title: string } & RouteProps) {
     return (
@@ -29,10 +31,12 @@ enum LoggedState {
 export function AppComponent() {
     const [ logged, setLogged ] = useState<LoggedState>(LoggedState.UNKNOWN);
 
+    const profileService = new ProfileService(useContext(HttpContext));
+
     useEffect(function () {
         if (PersistentStorage.get("token")) {
-            ProfileService.get(null, true)
-                .then(function (profile) {
+            profileService.get(null, true)
+                .then(function (profile: ProfileResource) {
                     store.dispatch(actions.loadProfile(profile));
                     setLogged(LoggedState.LOGGED);
                 })
@@ -49,19 +53,21 @@ export function AppComponent() {
             <InfoBannerComponent/>
             <main>
                 <BrowserRouter>
-                    { logged === LoggedState.GUEST && <Redirect to="/login"/> }
-                    <AppRoute title="Home" path="/" exact={ true }>
-                        { logged !== LoggedState.LOGGED && <Redirect to="/profile"/> }
-                    </AppRoute>
-                    <AppRoute title="Login" path="/login" exact={ true }>
-                        <LoginComponent/>
-                    </AppRoute>
-                    <AppRoute title="Register" path="/register" exact={ true }>
-                        <RegisterComponent/>
-                    </AppRoute>
-                    <AppRoute title="Profile" path="/profile/:id?" exact={ true } render={ props => (
-                        <ProfileComponent id={ props.match.params.id }/>
-                    ) }/>
+                    <HttpProvider>
+                        { logged === LoggedState.GUEST && <Redirect to="/login"/> }
+                        <AppRoute title="Home" path="/" exact={ true }>
+                            { logged !== LoggedState.LOGGED && <Redirect to="/profile"/> }
+                        </AppRoute>
+                        <AppRoute title="Login" path="/login" exact={ true }>
+                            <LoginComponent/>
+                        </AppRoute>
+                        <AppRoute title="Register" path="/register" exact={ true }>
+                            <RegisterComponent/>
+                        </AppRoute>
+                        <AppRoute title="Profile" path="/profile/:id?" exact={ true } render={ props => (
+                            <ProfileComponent id={ props.match.params.id }/>
+                        ) }/>
+                    </HttpProvider>
                 </BrowserRouter>
             </main>
         </Provider>

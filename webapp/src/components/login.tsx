@@ -1,6 +1,6 @@
 import "./account-form.scss";
 
-import React, { ChangeEvent, FormEvent, useCallback, useState } from "react";
+import React, { ChangeEvent, FormEvent, useCallback, useContext, useState } from "react";
 import Button from "@material-ui/core/Button";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -11,6 +11,8 @@ import { store } from "@store";
 import { actions } from "@store/actions";
 import { ProfileService } from "@services/profile.service";
 import { PersistentStorage } from "../storage/persistent-storage";
+import { HttpContext } from "../http";
+import { ProfileResource } from "@models/resources/profile-resource";
 
 export const LoginComponent = withRouter(function Login({ history }) {
     const [ user, setUser ] = useState<UserCredentials>({
@@ -25,13 +27,18 @@ export const LoginComponent = withRouter(function Login({ history }) {
         }), [ user, setUser ]);
     };
 
+    const http           = useContext(HttpContext);
+    const profileService = new ProfileService(http);
+    const accountService = new AccountService(http);
+
     const setMail     = setUserField("mail");
     const setPassword = setUserField("password");
 
     const login = useCallback(function (event: FormEvent) {
         event.preventDefault();
 
-        AccountService.login(user).then(function (token) {
+
+        accountService.login(user).then(function (token) {
             store.dispatch(actions.setInfoBannerMessage("success", "Successfully logged in"));
 
             const payload = JSON.parse(atob(token.split(".")[1]));
@@ -42,8 +49,8 @@ export const LoginComponent = withRouter(function Login({ history }) {
 
             PersistentStorage.set("token", token);
 
-            return ProfileService.get(payload.sub);
-        }).then(function (profile) {
+            return profileService.get(payload.sub);
+        }).then(function (profile: ProfileResource) {
             store.dispatch(actions.loadProfile(profile));
             history.push("/profile");
         });

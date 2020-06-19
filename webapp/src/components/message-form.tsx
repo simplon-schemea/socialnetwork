@@ -1,13 +1,14 @@
 import "./message-form.scss";
 import Button from "@material-ui/core/Button";
 import Send from "@material-ui/icons/Send";
-import React, { FormEvent, useCallback, useState } from "react";
+import React, { FormEvent, useCallback, useContext, useState } from "react";
 import { MessageService } from "@services/message.service";
 import { store } from "@store";
 import { actions } from "@store/actions";
 import { StoreService } from "@services/store.service";
 import { UUID } from "@models/types";
 import { MessageType } from "@models/message-type";
+import { HttpContext } from "../http";
 
 interface Props {
     topic: UUID
@@ -17,16 +18,18 @@ interface Props {
 export function MessageFormComponent(props: Props) {
     const [ content, setContent ] = useState("");
 
+    const messageService = new MessageService(useContext(HttpContext));
+
     const onChange = useCallback(function (event: React.ChangeEvent<HTMLTextAreaElement>) {
         setContent(event.target.value);
     }, [ setContent ]);
 
     const onSubmit = useCallback(function (event: FormEvent) {
         event.preventDefault();
-        MessageService.send(props.type, props.topic, content).then(function () {
+        messageService.send(props.type, props.topic, content).then(function () {
             store.dispatch(actions.setInfoBannerMessage("success", "Message Sent"));
             setContent("");
-            MessageService.list(props.type, props.topic).then(response => StoreService.updateMessageList(props.topic, response));
+            messageService.list(props.type, props.topic).then(response => StoreService.updateMessageList(props.topic, response));
         });
     }, [ content, props.topic, props.type ]);
 

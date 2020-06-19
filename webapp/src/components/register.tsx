@@ -6,6 +6,7 @@ import React, {
     FormEvent,
     SetStateAction,
     useCallback,
+    useContext,
     useEffect,
     useRef,
     useState,
@@ -18,6 +19,7 @@ import { AccountService } from "@services/account.service";
 import { useStore } from "react-redux";
 import { actions } from "@store/actions";
 import { withRouter } from "react-router-dom";
+import { HttpContext } from "../http";
 
 function setStateField<S>(state: S, setState: Dispatch<SetStateAction<S>>, field: keyof S) {
     return useCallback((event: ChangeEvent<HTMLInputElement>) => setState({
@@ -34,7 +36,6 @@ const AuthInput = React.forwardRef(function AuthInputImpl({ label, ...props }: I
 
         if (valueRef.current !== value) {
             target.reportValidity();
-            console.log("afet");
             valueRef.current = value;
         }
     }, []);
@@ -69,7 +70,8 @@ export const RegisterComponent = withRouter(function Register({ history }) {
         passwordBis: "",
     });
 
-    const store = useStore();
+    const store          = useStore();
+    const accountService = new AccountService(useContext(HttpContext));
 
 
     function setUserField(field: keyof User) {
@@ -93,7 +95,7 @@ export const RegisterComponent = withRouter(function Register({ history }) {
     const register = useCallback(function (event: FormEvent) {
         event.preventDefault();
 
-        AccountService.register(user).then(function () {
+        accountService.register(user).then(function () {
             store.dispatch(actions.setInfoBannerMessage("success", `Account created successfully`));
             history.push("/login");
         });
