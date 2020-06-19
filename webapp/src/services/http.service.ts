@@ -2,6 +2,8 @@ import { isBackendError } from "@models/backend-error";
 import { actions } from "@store/actions";
 import { store } from "@store";
 import { StringMap } from "@models/types";
+import { PersistentStorage } from "../storage/persistent-storage";
+import { InfoBannerType } from "@models/info-banner-type";
 
 
 export namespace Http {
@@ -17,45 +19,67 @@ export namespace Http {
         params?: StringMap
     }
 
-    function onload(this: XMLHttpRequest, request: Request, resolve: (value: any) => void, reject: Function) {
+
+    function onsuccess(this: XMLHttpRequest, request: Request, resolve: (value: any) => void, reject: Function) {
+        function notify(type: InfoBannerType, msg: string, forced?: boolean) {
+            if (!request.silent || forced) {
+                store.dispatch(actions.setInfoBannerMessage(type, msg));
+            }
+        }
+
         try {
-            const body = this.response;
+            if (request.followRedirect) {
+                const location = this.getResponseHeader("Location");
 
-            if (this.status >= 200 && this.status < 400) {
-                if (request.followRedirect) {
-                    const location = this.getResponseHeader("Location");
+                if (location) {
+                    Http.request({
+                        method: "GET",
+                        url: location,
+                        followRedirect: request.followRedirect,
+                        silent: request.silent,
+                    }).then(resolve);
 
-                    if (location) {
-                        Http.request({
-                            method: "GET",
-                            url: location,
-                            followRedirect: true,
-                            silent: request.silent,
-                        }).then(resolve);
-
-                        return;
-                    }
-                }
-
-                resolve(this.response);
-            } else {
-                const errors = typeof body === "string" ? JSON.parse(body) : body;
-
-                if (isBackendError(errors)) {
-                    if (!request.silent) {
-                        store.dispatch(actions.setInfoBannerMessage("error", `${ errors.error }: ${ errors.message }`));
-                    }
-
-                    reject(errors);
-                } else {
-                    store.dispatch(actions.setInfoBannerMessage("error", "Unknown error"));
-                    reject(this);
+                    return;
                 }
             }
+
+            resolve(this.response);
         } catch (e) {
             console.error(e);
-            store.dispatch(actions.setInfoBannerMessage("error", "Unknown error"));
+            notify("error", "Unknown error", true);
             reject(this);
+        }
+    }
+
+    function onerror(this: XMLHttpRequest, request: Request, reject: Function) {
+        function notify(type: InfoBannerType, msg: string, forced?: boolean) {
+            if (!request.silent || forced) {
+                store.dispatch(actions.setInfoBannerMessage(type, msg));
+            }
+        }
+
+        const body   = this.response;
+        const errors = typeof body === "string" ? JSON.parse(body) : body;
+
+        if (isBackendError(errors)) {
+            notify("error", `${ errors.error }: ${ errors.message }`);
+            reject(errors);
+        } else {
+            notify("error", "Unknown error");
+            reject(this);
+        }
+        switch (this.status) {
+            case  401:
+                PersistentStorage.remove("token");
+                notify("error", "Unauthorized");
+                reject(this);
+                break;
+            case 403:
+                notify("error", "Forbidden");
+                reject(this);
+                break;
+            default:
+                break;
         }
     }
 
@@ -86,9 +110,15 @@ export namespace Http {
 
             xhr.open(method, url);
 
-            xhr.onload          = onload.bind(xhr, req, resolve, reject);
-            xhr.onerror         = reject;
             xhr.withCredentials = true;
+
+            xhr.onloadend = function () {
+                if (xhr.status >= 200 && xhr.status < 400) {
+                    onsuccess.call(xhr, req as Request, resolve, reject);
+                } else {
+                    onerror.call(xhr, req as Request, reject);
+                }
+            };
 
             if (req.responseType) {
                 xhr.responseType = req.responseType;
@@ -101,7 +131,7 @@ export namespace Http {
             }
 
             {
-                const token = localStorage.getItem("token");
+                const token = PersistentStorage.get("token");
 
                 if (token) {
                     xhr.setRequestHeader("Authorization", `Bearer ${token}`);

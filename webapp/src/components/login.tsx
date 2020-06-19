@@ -10,6 +10,7 @@ import { withRouter } from "react-router-dom";
 import { store } from "@store";
 import { actions } from "@store/actions";
 import { ProfileService } from "@services/profile.service";
+import { PersistentStorage } from "../storage/persistent-storage";
 
 export const LoginComponent = withRouter(function Login({ history }) {
     const [ user, setUser ] = useState<UserCredentials>({
@@ -32,13 +33,14 @@ export const LoginComponent = withRouter(function Login({ history }) {
 
         AccountService.login(user).then(function (token) {
             store.dispatch(actions.setInfoBannerMessage("success", "Successfully logged in"));
-            localStorage.setItem("token", token);
 
             const payload = JSON.parse(atob(token.split(".")[1]));
 
             if (!payload.sub) {
                 throw new Error("invalid token");
             }
+
+            PersistentStorage.set("token", token);
 
             return ProfileService.get(payload.sub);
         }).then(function (profile) {

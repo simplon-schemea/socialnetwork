@@ -11,6 +11,7 @@ import { MessageFormComponent } from "./message-form";
 import { MessageListComponent } from "./message-list";
 import { MessageType } from "@models/message-type";
 import { ProfileResource } from "@models/resources/profile-resource";
+import { PersistentStorage } from "../storage/persistent-storage";
 
 interface Props {
     id?: string;
@@ -39,15 +40,19 @@ export const ProfileComponent = withRouter(function Profile({ history, ...props 
                 setProfile(profile);
             });
         } else {
-            setProfile(storeProfile);
+            if (PersistentStorage.get("token")) {
+                setProfile(storeProfile);
+            } else {
+                history.push("/login");
+            }
         }
     }, [ props.id || storeProfile ]);
 
     const logout = useCallback(function () {
-        AccountService.logout().then(function () {
-            store.dispatch(actions.setInfoBannerMessage("success", "Successfully logout"));
-            history.push("/login");
-        });
+        AccountService.logout();
+
+        store.dispatch(actions.setInfoBannerMessage("success", "Successfully logout"));
+        history.push("/login");
     }, []);
 
     if (!profile) {

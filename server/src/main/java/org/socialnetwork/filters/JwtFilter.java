@@ -2,6 +2,7 @@ package org.socialnetwork.filters;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import org.socialnetwork.security.CustomUserPrincipal;
 import org.socialnetwork.services.TokenService;
@@ -31,27 +32,31 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         final String authorization = request.getHeader("Authorization");
 
-        if (Objects.nonNull(authorization) && authorization.startsWith("Bearer ")) {
-            final String jwt = authorization.substring(7);
+        try {
+            if (Objects.nonNull(authorization) && authorization.startsWith("Bearer ")) {
+                final String jwt = authorization.substring(7);
 
-            final Jws<Claims> claims = service.parse(jwt);
-            final Claims body = claims.getBody();
+                final Jws<Claims> claims = service.parse(jwt);
+                final Claims body = claims.getBody();
 
-            final UUID userID = UUID.fromString(body.getSubject());
-            final String username = body.get(TokenService.USERNAME, String.class);
-            final ArrayList<?> roles = body.get(TokenService.AUTHORITIES, ArrayList.class);
+                final UUID userID = UUID.fromString(body.getSubject());
+                final String username = body.get(TokenService.USERNAME, String.class);
+                final ArrayList<?> roles = body.get(TokenService.AUTHORITIES, ArrayList.class);
 
-            final Set<SimpleGrantedAuthority> authorities = roles.stream()
-                    .map(String.class::cast)
-                    .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toSet());
+                final Set<SimpleGrantedAuthority> authorities = roles.stream()
+                        .map(String.class::cast)
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toSet());
 
-            final CustomUserPrincipal principal = new CustomUserPrincipal(userID, username, null, authorities);
-            final UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(principal, null, authorities);
+                final CustomUserPrincipal principal = new CustomUserPrincipal(userID, username, null, authorities);
+                final UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(principal, null, authorities);
 
-            SecurityContextHolder.getContext().setAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(token);
+            }
+
+            chain.doFilter(request, response);
+        } catch (SignatureException e) {
+            response.sendError(401, "invalid token");
         }
-
-        chain.doFilter(request, response);
     }
 }

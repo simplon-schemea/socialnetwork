@@ -1,7 +1,7 @@
 import { User, UserCredentials } from "@models/user";
 import { Http } from "./http.service";
 import { baseURL } from "../config";
-import { ProfileResource } from "@models/resources/profile-resource";
+import { PersistentStorage } from "../storage/persistent-storage";
 
 const endpoint = baseURL + "/account";
 
@@ -23,6 +23,6 @@ export namespace AccountService {
     }
 
     export function logout() {
-        return Http.request(endpoint + "/logout");
+        PersistentStorage.remove("token");
     }
 }

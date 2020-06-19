@@ -8,6 +8,7 @@ import { InfoBannerComponent } from "./info-banner";
 import { ProfileService } from "@services/profile.service";
 import { actions } from "@store/actions";
 import { ProfileComponent } from "./profile";
+import { PersistentStorage } from "../storage/persistent-storage";
 
 function AppRoute({ title, render, children, ...props }: { title: string } & RouteProps) {
     return (
@@ -29,14 +30,18 @@ export function AppComponent() {
     const [ logged, setLogged ] = useState<LoggedState>(LoggedState.UNKNOWN);
 
     useEffect(function () {
-        ProfileService.get(null, true)
-            .then(function (profile) {
-                store.dispatch(actions.loadProfile(profile));
-                setLogged(LoggedState.LOGGED);
-            })
-            .catch(function () {
-                setLogged(LoggedState.GUEST);
-            });
+        if (PersistentStorage.get("token")) {
+            ProfileService.get(null, true)
+                .then(function (profile) {
+                    store.dispatch(actions.loadProfile(profile));
+                    setLogged(LoggedState.LOGGED);
+                })
+                .catch(function () {
+                    setLogged(LoggedState.GUEST);
+                });
+        } else {
+            setLogged(LoggedState.GUEST);
+        }
     }, [ setLogged ]);
 
     return (
