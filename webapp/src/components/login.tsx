@@ -38,16 +38,16 @@ export const LoginComponent = withRouter(function Login({ history }) {
         event.preventDefault();
 
 
-        accountService.login(user).then(function (token) {
+        accountService.login(user).then(function (response) {
             store.dispatch(actions.setInfoBannerMessage("success", "Successfully logged in"));
 
-            const payload = JSON.parse(atob(token.split(".")[1]));
+            const payload = JSON.parse(atob(response.accessToken.split(".")[1]));
 
             if (!payload.sub) {
                 throw new Error("invalid token");
             }
 
-            PersistentStorage.set("token", token);
+            PersistentStorage.set("token", response.accessToken);
 
             return profileService.get(payload.sub);
         }).then(function (profile: ProfileResource) {

@@ -8,6 +8,7 @@ import org.socialnetwork.repositories.RoleRepository;
 import org.socialnetwork.repositories.UserRepository;
 import org.socialnetwork.resources.AccountCreationResource;
 import org.socialnetwork.resources.AccountLoginResource;
+import org.socialnetwork.resources.LoginResponseResource;
 import org.socialnetwork.security.CustomUserPrincipal;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -73,7 +74,7 @@ public class AccountService {
         return repository.save(entity).getId();
     }
 
-    public String login(AccountLoginResource input) {
+    public LoginResponseResource login(AccountLoginResource input) {
         {
             CustomUserPrincipal user = getUserPrincipal().orElse(null);
 
@@ -94,7 +95,10 @@ public class AccountService {
         final Object principal = authentication.getPrincipal();
 
         if (principal instanceof CustomUserPrincipal) {
-            return tokenService.generate((CustomUserPrincipal) principal);
+            final String accessToken = tokenService.generate((CustomUserPrincipal) principal);
+            return LoginResponseResource.builder()
+                    .accessToken(accessToken)
+                    .build();
         } else {
             throw new RuntimeException();
         }

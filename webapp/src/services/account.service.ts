@@ -2,6 +2,7 @@ import { User, UserCredentials } from "@models/user";
 import { baseURL } from "../config";
 import { PersistentStorage } from "../storage/persistent-storage";
 import { HttpClient } from "../http/client";
+import { LoginResponseResource } from "@models/resources/login-response-resource";
 
 const endpoint = baseURL + "/account";
 
@@ -16,10 +17,10 @@ export class AccountService {
     }
 
     login(user: UserCredentials) {
-        return this.http.request<string>({
+        return this.http.request<LoginResponseResource>({
             url: endpoint + "/login",
             body: user,
-            responseType: "text",
+            responseType: "json",
         });
     }
 
